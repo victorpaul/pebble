@@ -1,0 +1,41 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+    >
+
+        <TextView
+            android:id="@+id/txt_pebble_is_not_connected"
+            android:text="@string/txt_pebble_is_not_connected"
+            style="@style/AppTheme.statusTextNegative"
+         />
+
+        <TextView
+            android:id="@+id/txt_pebble_is_connected"
+            android:text="@string/txt_pebble_is_connected"
+            style="@style/AppTheme.statusTextPositive"
+        />
+
+        <EditText
+            android:hint="Your message"
+            android:maxLength="200"
+            android:id="@+id/f_message"
+            android:lines="3"
+            style="@style/AppTheme.defaultText"
+        />
+        <Button
+            android:id="@+id/btn_send_msg"
+            android:text="Send a message"
+            style="@style/AppTheme.defaultButton"
+        />
+    </LinearLayout>
+
+
+
+</RelativeLayout>
