@@ -1,4 +1,4 @@
-package com.sukinsan.pebble.pebble;
+package com.sukinsan.pebble.activity;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -14,13 +14,21 @@ import android.widget.Toast;
 
 import com.getpebble.android.kit.PebbleKit;
 import com.getpebble.android.kit.util.PebbleDictionary;
+import com.sukinsan.pebble.R;
+import com.sukinsan.pebble.utils.HardwareUtils;
 
 import java.util.UUID;
 
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener {
     public final static String TAG = MainActivity.class.getSimpleName();
+
+    public final static int KEY_DATE = 1;
+    public final static int KEY_NETWORK = 2;
+    public final static int KEY_BATTERY = 3;
+    public final static int KEY_WEATHER = 4;
     public final static int KEY_DATA = 5;
+
     private final static UUID PEBBLE_APP_UUID = UUID.fromString("7b7c495e-1c45-48b6-85f9-7568adf74ec6");
     private boolean isPebbleConnected = false;
 
@@ -119,7 +127,15 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 }
 
                 PebbleDictionary data = new PebbleDictionary();
+
+
+                data.addString(KEY_DATE,"friday");
+                data.addString(KEY_NETWORK,"wifi");
+                data.addString(KEY_BATTERY, HardwareUtils.getBatteryStatus(this));
+                data.addString(KEY_WEATHER,"cold");
                 data.addString(KEY_DATA,message);
+
+
                 PebbleKit.sendDataToPebble(getApplicationContext(), PEBBLE_APP_UUID, data);
 
                 userMessage.setText("");
