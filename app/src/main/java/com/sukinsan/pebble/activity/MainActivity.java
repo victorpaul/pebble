@@ -23,13 +23,6 @@ import java.util.UUID;
 public class MainActivity extends ActionBarActivity implements View.OnClickListener {
     public final static String TAG = MainActivity.class.getSimpleName();
 
-    public final static int KEY_DATE = 1;
-    public final static int KEY_NETWORK = 2;
-    public final static int KEY_BATTERY = 3;
-    public final static int KEY_WEATHER = 4;
-    public final static int KEY_DATA = 5;
-
-    private final static UUID PEBBLE_APP_UUID = UUID.fromString("7b7c495e-1c45-48b6-85f9-7568adf74ec6");
     private boolean isPebbleConnected = false;
 
     private View statusConnected;
@@ -54,27 +47,31 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     }
 
     public void registerPebbleBroadcasts(){
-        PebbleKit.registerPebbleConnectedReceiver(getApplicationContext(), new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                setPebbleStatus(true);
-            }
-        });
+        try {
+            PebbleKit.registerPebbleConnectedReceiver(getApplicationContext(), new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    setPebbleStatus(true);
+                }
+            });
 
-        PebbleKit.registerPebbleDisconnectedReceiver(getApplicationContext(), new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                setPebbleStatus(false);
-            }
-        });
-        PebbleKit.registerReceivedDataHandler(this, new PebbleKit.PebbleDataReceiver(PEBBLE_APP_UUID) {
-            @Override
-            public void receiveData(final Context context, final int transactionId, final PebbleDictionary data) {
-                Log.i(getLocalClassName(), "Received value=" + data.getString(0) + " for key: 0");
-                PebbleKit.sendAckToPebble(getApplicationContext(), transactionId);
-            }
+            PebbleKit.registerPebbleDisconnectedReceiver(getApplicationContext(), new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    setPebbleStatus(false);
+                }
+            });
 
-        });
+            PebbleKit.registerReceivedDataHandler(this, new PebbleKit.PebbleDataReceiver(HardwareUtils.PEBBLE_APP_UUID) {
+                @Override
+                public void receiveData(final Context context, final int transactionId, final PebbleDictionary data) {
+                    Log.i(getLocalClassName(), "Received value=" + data.getString(0) + " for key: 0");
+                    PebbleKit.sendAckToPebble(getApplicationContext(), transactionId);
+                }
+            });
+        }catch(Exception e){
+
+        }
     }
 
     public void setPebbleStatus(boolean isConnected){
@@ -87,28 +84,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             statusConnected.setVisibility(View.GONE);
             statusDisconnected.setVisibility(View.VISIBLE);
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -126,17 +101,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     return;
                 }
 
-                PebbleDictionary data = new PebbleDictionary();
-
-
-                data.addString(KEY_DATE,"friday");
-                data.addString(KEY_NETWORK,"wifi");
-                data.addString(KEY_BATTERY, HardwareUtils.getBatteryStatus(this));
-                data.addString(KEY_WEATHER,"cold");
-                data.addString(KEY_DATA,message);
-
-
-                PebbleKit.sendDataToPebble(getApplicationContext(), PEBBLE_APP_UUID, data);
+                HardwareUtils.sendUpdateToPebble(this,message);
 
                 userMessage.setText("");
                 Toast.makeText(getApplicationContext(), "Message has been sent", Toast.LENGTH_LONG).show();
