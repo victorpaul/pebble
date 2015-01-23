@@ -5,6 +5,9 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+
     <application
         android:name=".application.PebbleApplication"
         android:allowBackup="true"
@@ -21,7 +24,16 @@
             </intent-filter>
         </activity>
 
+
         <service android:name=".service.WatchUpdaterService" android:exported="false"/>
+
+        <receiver android:name=".broadcast.AlarmReceiver" />
+        <receiver android:name=".broadcast.BootReceiver" android:exported="false" android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

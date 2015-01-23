@@ -1,8 +1,10 @@
 package com.sukinsan.pebble.activity;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +17,7 @@ import android.widget.Toast;
 import com.getpebble.android.kit.PebbleKit;
 import com.getpebble.android.kit.util.PebbleDictionary;
 import com.sukinsan.pebble.R;
+import com.sukinsan.pebble.broadcast.BootReceiver;
 import com.sukinsan.pebble.utils.HardwareUtils;
 
 import java.util.UUID;
@@ -35,6 +38,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        HardwareUtils.runCron(this);
+
         statusConnected = findViewById(R.id.txt_pebble_is_connected);
         statusDisconnected = findViewById(R.id.txt_pebble_is_not_connected);
         btnSend = findViewById(R.id.btn_send_msg);
@@ -51,14 +56,14 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             PebbleKit.registerPebbleConnectedReceiver(getApplicationContext(), new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    setPebbleStatus(true);
+                setPebbleStatus(true);
                 }
             });
 
             PebbleKit.registerPebbleDisconnectedReceiver(getApplicationContext(), new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    setPebbleStatus(false);
+                setPebbleStatus(false);
                 }
             });
 
@@ -106,6 +111,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 userMessage.setText("");
                 Toast.makeText(getApplicationContext(), "Message has been sent", Toast.LENGTH_LONG).show();
                 break;
+
         }
     }
 }

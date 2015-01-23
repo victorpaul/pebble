@@ -31,8 +31,8 @@ public class PebbleApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        serviceHandler.removeMessages(SEND_UPDATE);
-        serviceHandler.sendEmptyMessageDelayed(SEND_UPDATE,DELAY_SEND_UPDATE);// run with delay
-        startService(new Intent(getApplicationContext(), WatchUpdaterService.class)); // run now
+        //serviceHandler.removeMessages(SEND_UPDATE);
+        //serviceHandler.sendEmptyMessageDelayed(SEND_UPDATE,DELAY_SEND_UPDATE);// run with delay
+        //startService(new Intent(getApplicationContext(), WatchUpdaterService.class)); // run now
     }
 }

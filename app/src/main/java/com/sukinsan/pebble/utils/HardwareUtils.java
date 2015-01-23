@@ -1,5 +1,7 @@
 package com.sukinsan.pebble.utils;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -7,11 +9,14 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
+import android.util.Log;
 
 import com.getpebble.android.kit.PebbleKit;
 import com.getpebble.android.kit.util.PebbleDictionary;
+import com.sukinsan.pebble.broadcast.AlarmReceiver;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -19,6 +24,7 @@ import java.util.UUID;
  * Created by viktor_2 on 1/9/15.
  */
 public class HardwareUtils {
+    public final static String TAG = HardwareUtils.class.getSimpleName();
 
     public final static int KEY_DATE = 1;
     public final static int KEY_NETWORK = 2;
@@ -90,6 +96,19 @@ public class HardwareUtils {
         data.addString(KEY_WEATHER, "winter");
         data.addString(KEY_DATA, message);
         PebbleKit.sendDataToPebble(context, PEBBLE_APP_UUID, data);
+    }
+
+    public static void runCron(Context context){
+        Log.i(TAG, "runCron(Context context)");
+        AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+
+        alarmMgr.cancel(alarmIntent);
+
+        Calendar calendar = Calendar.getInstance();
+        alarmMgr.setRepeating(AlarmManager.ELAPSED_REALTIME, calendar.getTimeInMillis() + 1000 * 10, 1000 * 60, alarmIntent);
+
     }
 
 }
