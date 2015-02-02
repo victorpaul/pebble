@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,7 +39,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        HardwareUtils.runCron(this);
+        //Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
+        //startActivity(browserIntent);
+
+        HardwareUtils.runCron(getApplicationContext());
 
         statusConnected = findViewById(R.id.txt_pebble_is_connected);
         statusDisconnected = findViewById(R.id.txt_pebble_is_not_connected);

@@ -22,7 +22,7 @@ public class WatchUpdaterService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         if(HardwareUtils.isItOkToSensUpdateFromBackground(getApplicationContext())) {
-            HardwareUtils.sendUpdateToPebble(getApplicationContext(), "Last sync from phone was at: \n" + (new Date()).toString());
+            HardwareUtils.sendUpdateToPebble(getApplicationContext(), "Service sync: \n" + (new Date()).toString());
         }
     }
 }

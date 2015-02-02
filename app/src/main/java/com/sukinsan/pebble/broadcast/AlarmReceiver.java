@@ -18,8 +18,8 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.i(TAG, "onReceive(Context context, Intent intent)");
-        if(HardwareUtils.isItOkToSensUpdateFromBackground(context)) {
-            HardwareUtils.sendUpdateToPebble(context, "Last sync from AlarmClock was at: \n" + (new Date()).toString());
+        if(HardwareUtils.isItOkToSensUpdateFromBackground(context.getApplicationContext())) {
+            HardwareUtils.sendUpdateToPebble(context.getApplicationContext(), "sync at:" + (new Date()).toString());
         }
     }
 }

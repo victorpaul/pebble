@@ -9,11 +9,13 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
+import android.os.SystemClock;
 import android.util.Log;
 
 import com.getpebble.android.kit.PebbleKit;
 import com.getpebble.android.kit.util.PebbleDictionary;
 import com.sukinsan.pebble.broadcast.AlarmReceiver;
+import com.sukinsan.pebble.entity.Cache;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -26,20 +28,20 @@ import java.util.UUID;
 public class HardwareUtils {
     public final static String TAG = HardwareUtils.class.getSimpleName();
 
+    public final static String PEBBLE_APP_ID = "7b7c495e-1c45-48b6-85f9-7568adf74ec6";
+
+    public final static int DATA_DELAY = 1000 * 60 *3;
     public final static int KEY_DATE = 1;
     public final static int KEY_NETWORK = 2;
     public final static int KEY_BATTERY = 3;
     public final static int KEY_WEATHER = 4;
     public final static int KEY_DATA = 5;
 
-    public final static UUID PEBBLE_APP_UUID = UUID.fromString("7b7c495e-1c45-48b6-85f9-7568adf74ec6");
+    public final static UUID PEBBLE_APP_UUID = UUID.fromString(PEBBLE_APP_ID);
 
     public static String getBatteryStatus(Context context){
         IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         Intent batteryStatus = context.registerReceiver(null, ifilter);
-
-        int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
-        boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL;
 
         // How are we charging?
         int chargePlug = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
@@ -47,11 +49,8 @@ public class HardwareUtils {
         boolean acCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_AC;
 
         int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-        int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
 
-        float batteryPct = level / (float)scale;
-
-        StringBuilder statusString = new StringBuilder(batteryPct + "%");
+        StringBuilder statusString = new StringBuilder(level + "%");
 
         if(usbCharge){
             statusString.append("(usb)");
@@ -88,14 +87,47 @@ public class HardwareUtils {
         }
     }
 
-    public static void sendUpdateToPebble(Context context, String message){
-        PebbleDictionary data = new PebbleDictionary();
-        data.addString(KEY_DATE, (new SimpleDateFormat("dd/MMM/yyyy")).format(new Date()).toString());
-        data.addString(KEY_NETWORK, getNetworkStatus(context));
-        data.addString(KEY_BATTERY, HardwareUtils.getBatteryStatus(context));
-        data.addString(KEY_WEATHER, "winter");
-        data.addString(KEY_DATA, message);
-        PebbleKit.sendDataToPebble(context, PEBBLE_APP_UUID, data);
+    public static void sendUpdateToPebble(Context context, final String message){
+        final PebbleDictionary data = new PebbleDictionary();
+
+        final String batteryLevel = HardwareUtils.getBatteryStatus(context);
+        final String networkStatus = getNetworkStatus(context);
+        final String date = (new SimpleDateFormat("dd/MMM/yyyy")).format(new Date()).toString();
+        final String weather = "winter";
+
+        SystemUtils.getCache(context,new Cache.CallBack() {
+            @Override
+            public void run(Cache cache) {
+                if(!cache.getLastBatteryLevel().equals(batteryLevel)) {
+                    cache.setLastBatteryLevel(batteryLevel);
+                    data.addString(KEY_BATTERY, batteryLevel);
+                }
+                if(!cache.getLastNetwork().equals(networkStatus)) {
+                    cache.setLastNetwork(networkStatus);
+                    data.addString(KEY_NETWORK, networkStatus);
+                }
+                if(!cache.getLastDateStatus().equals(date)){
+                    cache.setLastDateStatus(date);
+                    data.addString(KEY_DATE,date);
+                }
+
+                if(!cache.getLastDateStatus().equals(date)){
+                    cache.setLastWeatherStatus(weather);
+                    data.addString(KEY_WEATHER,weather);
+                }
+
+                if(cache.getLastDataSyncDate() + DATA_DELAY < System.currentTimeMillis()) {
+                    cache.setLastDataSyncDate(System.currentTimeMillis());
+                    data.addString(KEY_DATA, "DELAY " + message);
+                }
+            }
+        },false);
+
+        if(data.size() > 0 ) {
+            data.addString(KEY_DATA, "data.size() > 0 " + message);
+            SystemUtils.saveCache(context);
+            PebbleKit.sendDataToPebble(context, PEBBLE_APP_UUID, data);
+        }
     }
 
     public static void runCron(Context context){
@@ -105,10 +137,7 @@ public class HardwareUtils {
         PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
         alarmMgr.cancel(alarmIntent);
-
-        Calendar calendar = Calendar.getInstance();
-        alarmMgr.setRepeating(AlarmManager.ELAPSED_REALTIME, calendar.getTimeInMillis() + 1000 * 10, 1000 * 60, alarmIntent);
-
+        alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * 60, alarmIntent);
     }
 
 }
