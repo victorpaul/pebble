@@ -17,9 +17,12 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i(TAG, "onReceive(Context context, Intent intent)");
+
         if(HardwareUtils.isItOkToSensUpdateFromBackground(context.getApplicationContext())) {
+            Log.i(TAG, "onReceive(Context context, Intent intent) OK to send update");
             HardwareUtils.sendUpdateToPebble(context.getApplicationContext(), "sync at:" + (new Date()).toString());
+        }else{
+            Log.i(TAG, "onReceive(Context context, Intent intent) IT'S NOT OK to send update");
         }
     }
 }

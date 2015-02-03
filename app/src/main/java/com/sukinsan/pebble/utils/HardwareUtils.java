@@ -30,7 +30,8 @@ public class HardwareUtils {
 
     public final static String PEBBLE_APP_ID = "7b7c495e-1c45-48b6-85f9-7568adf74ec6";
 
-    public final static int DATA_DELAY = 1000 * 60 *3;
+    public final static int UPDATE_INTERVAL = 1000 * 60;
+
     public final static int KEY_DATE = 1;
     public final static int KEY_NETWORK = 2;
     public final static int KEY_BATTERY = 3;
@@ -116,15 +117,13 @@ public class HardwareUtils {
                     data.addString(KEY_WEATHER,weather);
                 }
 
-                if(cache.getLastDataSyncDate() + DATA_DELAY < System.currentTimeMillis()) {
-                    cache.setLastDataSyncDate(System.currentTimeMillis());
-                    data.addString(KEY_DATA, "DELAY " + message);
-                }
+                data.addString(KEY_DATA, "data.size() == 0 " + data.size() + " " + message);
+
             }
         },false);
 
         if(data.size() > 0 ) {
-            data.addString(KEY_DATA, "data.size() > 0 " + message);
+
             SystemUtils.saveCache(context);
             PebbleKit.sendDataToPebble(context, PEBBLE_APP_UUID, data);
         }
@@ -137,7 +136,7 @@ public class HardwareUtils {
         PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
         alarmMgr.cancel(alarmIntent);
-        alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * 60, alarmIntent);
+        alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),UPDATE_INTERVAL,alarmIntent);
     }
 
 }
