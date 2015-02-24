@@ -1,5 +1,7 @@
 package com.sukinsan.pebble.entity;
 
+import org.json.JSONException;
+
 /**
  * Created by victorpaul on 2/2/15.
  */
@@ -13,6 +15,16 @@ public class Cache {
     private String lastWeatherStatus = "";
     private String lastDateStatus = "";
     private long lastDataSyncDate = 0;
+
+    private String weatherLocation;
+
+    public String getWeatherLocation() {
+        return weatherLocation;
+    }
+
+    public void setWeatherLocation(String weatherLocation) {
+        this.weatherLocation = weatherLocation;
+    }
 
     public Cache() {}
 
@@ -64,6 +76,7 @@ public class Cache {
                 ", lastWeatherStatus='" + lastWeatherStatus + '\'' +
                 ", lastDateStatus='" + lastDateStatus + '\'' +
                 ", lastDataSyncDate=" + lastDataSyncDate +
+                ", weatherLocation='" + weatherLocation + '\'' +
                 '}';
     }
 }

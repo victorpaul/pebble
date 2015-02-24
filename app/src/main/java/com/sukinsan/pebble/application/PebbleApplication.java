@@ -7,12 +7,17 @@ import android.os.Message;
 
 import com.sukinsan.pebble.service.WatchUpdaterService;
 
+import org.codehaus.jackson.map.DeserializationConfig;
+import org.codehaus.jackson.map.ObjectMapper;
+
 /**
  * Created by victorpaul on 14/1/15.
  */
 public class PebbleApplication extends Application {
     public static final int SEND_UPDATE = 1000;
     public static final int DELAY_SEND_UPDATE = 1000 * 60 * 3;
+
+    public static final ObjectMapper MAPPER = new ObjectMapper().configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
     public Handler serviceHandler = new Handler(){
         @Override

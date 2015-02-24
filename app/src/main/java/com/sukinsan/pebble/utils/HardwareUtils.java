@@ -16,6 +16,7 @@ import com.getpebble.android.kit.PebbleKit;
 import com.getpebble.android.kit.util.PebbleDictionary;
 import com.sukinsan.pebble.broadcast.AlarmReceiver;
 import com.sukinsan.pebble.entity.Cache;
+import com.sukinsan.pebble.task.GetWeather;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -89,12 +90,13 @@ public class HardwareUtils {
     }
 
     public static void sendUpdateToPebble(Context context, final String message){
+        new GetWeather(context).execute();
+
         final PebbleDictionary data = new PebbleDictionary();
 
         final String batteryLevel = HardwareUtils.getBatteryStatus(context);
         final String networkStatus = getNetworkStatus(context);
         final String date = (new SimpleDateFormat("EEEE d, MMM")).format(new Date()).toString();
-        final String weather = "winter";
 
         SystemUtils.getCache(context,new Cache.CallBack() {
             @Override
@@ -112,11 +114,7 @@ public class HardwareUtils {
                     data.addString(KEY_DATE,date);
                 }
 
-                if(!cache.getLastWeatherStatus().equals(weather)){
-                    cache.setLastWeatherStatus(weather);
-                    data.addString(KEY_WEATHER,weather);
-                }
-
+                data.addString(KEY_WEATHER,cache.getLastWeatherStatus());
                 data.addString(KEY_DATA, message);
 
             }
