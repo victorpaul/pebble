@@ -30,7 +30,7 @@ public class HardwareUtils {
 
     public final static String PEBBLE_APP_ID = "7b7c495e-1c45-48b6-85f9-7568adf74ec6";
 
-    public final static int UPDATE_INTERVAL = 1000 * 60;
+    public final static int UPDATE_INTERVAL = 1000 * 60 * 3;
 
     public final static int KEY_DATE = 1;
     public final static int KEY_NETWORK = 2;
@@ -78,13 +78,13 @@ public class HardwareUtils {
             }else{
                 WifiManager wifi = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
                 if (wifi.isWifiEnabled()){
-                    return "mobile(wifi)";
+                    return "mob(wifi)";
                 }else{
                     return "mobile";
                 }
             }
         }else{
-            return "no connection";
+            return "O_o";
         }
     }
 
@@ -93,7 +93,7 @@ public class HardwareUtils {
 
         final String batteryLevel = HardwareUtils.getBatteryStatus(context);
         final String networkStatus = getNetworkStatus(context);
-        final String date = (new SimpleDateFormat("dd/MMM/yyyy")).format(new Date()).toString();
+        final String date = (new SimpleDateFormat("EEEE d, MMM")).format(new Date()).toString();
         final String weather = "winter";
 
         SystemUtils.getCache(context,new Cache.CallBack() {
@@ -112,12 +112,12 @@ public class HardwareUtils {
                     data.addString(KEY_DATE,date);
                 }
 
-                if(!cache.getLastDateStatus().equals(date)){
+                if(!cache.getLastWeatherStatus().equals(weather)){
                     cache.setLastWeatherStatus(weather);
                     data.addString(KEY_WEATHER,weather);
                 }
 
-                data.addString(KEY_DATA, "data.size() == 0 " + data.size() + " " + message);
+                data.addString(KEY_DATA, message);
 
             }
         },false);
