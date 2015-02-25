@@ -12,18 +12,16 @@ public class Cache {
 
     private String lastBatteryLevel = "";
     private String lastNetwork = "";
-    private String lastWeatherStatus = "";
     private String lastDateStatus = "";
-    private long lastDataSyncDate = 0;
 
-    private String weatherLocation;
+    private Weather weather;
 
-    public String getWeatherLocation() {
-        return weatherLocation;
+    public Weather getWeather() {
+        return weather;
     }
 
-    public void setWeatherLocation(String weatherLocation) {
-        this.weatherLocation = weatherLocation;
+    public void setWeather(Weather weather) {
+        this.weather = weather;
     }
 
     public Cache() {}
@@ -44,14 +42,6 @@ public class Cache {
         this.lastNetwork = lastNetwork;
     }
 
-    public String getLastWeatherStatus() {
-        return lastWeatherStatus;
-    }
-
-    public void setLastWeatherStatus(String lastWeatherStatus) {
-        this.lastWeatherStatus = lastWeatherStatus;
-    }
-
     public String getLastDateStatus() {
         return lastDateStatus;
     }
@@ -60,23 +50,13 @@ public class Cache {
         this.lastDateStatus = lastDateStatus;
     }
 
-    public long getLastDataSyncDate() {
-        return lastDataSyncDate;
-    }
-
-    public void setLastDataSyncDate(long lastDataSyncDate) {
-        this.lastDataSyncDate = lastDataSyncDate;
-    }
-
     @Override
     public String toString() {
         return "Cache{" +
                 "lastBatteryLevel='" + lastBatteryLevel + '\'' +
                 ", lastNetwork='" + lastNetwork + '\'' +
-                ", lastWeatherStatus='" + lastWeatherStatus + '\'' +
                 ", lastDateStatus='" + lastDateStatus + '\'' +
-                ", lastDataSyncDate=" + lastDataSyncDate +
-                ", weatherLocation='" + weatherLocation + '\'' +
+                ", weather=" + weather +
                 '}';
     }
 }

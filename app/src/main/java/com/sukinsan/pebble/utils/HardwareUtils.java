@@ -9,17 +9,15 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
-import android.os.SystemClock;
 import android.util.Log;
 
 import com.getpebble.android.kit.PebbleKit;
 import com.getpebble.android.kit.util.PebbleDictionary;
 import com.sukinsan.pebble.broadcast.AlarmReceiver;
 import com.sukinsan.pebble.entity.Cache;
-import com.sukinsan.pebble.task.GetWeather;
+import com.sukinsan.pebble.task.GetWeatherTask;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -31,7 +29,9 @@ public class HardwareUtils {
 
     public final static String PEBBLE_APP_ID = "7b7c495e-1c45-48b6-85f9-7568adf74ec6";
 
-    public final static int UPDATE_INTERVAL = 1000 * 60 * 3;
+    public final static int UPDATE_WEATHER_INTERVAL = 1000 * 60 * 20;
+    public final static int UPDATE_WEATHER_INTERVAL_PEBBLE = 1000 * 60 * 5;
+    public final static int UPDATE_INTERVAL = 1000 * 60 * 2;
 
     public final static int KEY_DATE = 1;
     public final static int KEY_NETWORK = 2;
@@ -89,14 +89,11 @@ public class HardwareUtils {
         }
     }
 
-    public static void sendUpdateToPebble(Context context, final String message){
-        new GetWeather(context).execute();
-
+    public static void sendUpdateToPebble(final Context context, final String message){
         final PebbleDictionary data = new PebbleDictionary();
-
         final String batteryLevel = HardwareUtils.getBatteryStatus(context);
         final String networkStatus = getNetworkStatus(context);
-        final String date = (new SimpleDateFormat("EEEE d, MMM")).format(new Date()).toString();
+        final String date = (new SimpleDateFormat("EEE d, MMM")).format(new Date()).toString();
 
         SystemUtils.getCache(context,new Cache.CallBack() {
             @Override
@@ -114,7 +111,14 @@ public class HardwareUtils {
                     data.addString(KEY_DATE,date);
                 }
 
-                data.addString(KEY_WEATHER,cache.getLastWeatherStatus());
+                if(cache.getWeather() == null || cache.getWeather().getLastUpdate() + UPDATE_WEATHER_INTERVAL < System.currentTimeMillis()){ // update weather every 20 minutes
+                    new GetWeatherTask(context).execute();
+                }
+
+                if(cache.getWeather() != null && cache.getWeather().getLastUpdate() + UPDATE_WEATHER_INTERVAL_PEBBLE < System.currentTimeMillis()){
+                    data.addString(KEY_WEATHER,cache.getWeather().getDescription());
+                }
+
                 data.addString(KEY_DATA, message);
 
             }
