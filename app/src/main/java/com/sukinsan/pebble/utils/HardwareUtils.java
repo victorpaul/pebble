@@ -30,7 +30,7 @@ public class HardwareUtils {
     public final static String PEBBLE_APP_ID = "7b7c495e-1c45-48b6-85f9-7568adf74ec6";
 
     public final static int UPDATE_WEATHER_INTERVAL = 1000 * 60 * 20;
-    public final static int UPDATE_WEATHER_INTERVAL_PEBBLE = 1000 * 60 * 5;
+    public final static int UPDATE_WEATHER_INTERVAL_PEBBLE = 1000 * 60 * 1;
     public final static int UPDATE_INTERVAL = 1000 * 60 * 2;
 
     public final static int KEY_DATE = 1;
@@ -89,7 +89,7 @@ public class HardwareUtils {
         }
     }
 
-    public static void sendUpdateToPebble(final Context context, final String message){
+    public static void sendUpdateToPebble(final Context context){
         final PebbleDictionary data = new PebbleDictionary();
         final String batteryLevel = HardwareUtils.getBatteryStatus(context);
         final String networkStatus = getNetworkStatus(context);
@@ -118,8 +118,6 @@ public class HardwareUtils {
                 if(cache.getWeather() != null && cache.getWeather().getLastUpdate() + UPDATE_WEATHER_INTERVAL_PEBBLE < System.currentTimeMillis()){
                     data.addString(KEY_WEATHER,cache.getWeather().getDescription());
                 }
-
-                data.addString(KEY_DATA, message);
 
             }
         },false);

@@ -22,16 +22,9 @@
             style="@style/AppTheme.statusTextPositive"
         />
 
-        <EditText
-            android:hint="Your message"
-            android:maxLength="200"
-            android:id="@+id/f_message"
-            android:lines="3"
-            style="@style/AppTheme.defaultText"
-        />
         <Button
             android:id="@+id/btn_send_msg"
-            android:text="Send a message"
+            android:text="Send a update"
             style="@style/AppTheme.defaultButton"
         />
         <Button

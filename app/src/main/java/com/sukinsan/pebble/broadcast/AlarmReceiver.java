@@ -19,7 +19,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         if(HardwareUtils.isItOkToSensUpdateFromBackground(context.getApplicationContext())) {
-            HardwareUtils.sendUpdateToPebble(context.getApplicationContext(), (new Date()).toString());
+            HardwareUtils.sendUpdateToPebble(context.getApplicationContext());
         }
     }
 }

@@ -32,7 +32,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private View statusConnected;
     private View statusDisconnected;
     private View btnSend;
-    private EditText userMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +46,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         statusConnected = findViewById(R.id.txt_pebble_is_connected);
         statusDisconnected = findViewById(R.id.txt_pebble_is_not_connected);
         btnSend = findViewById(R.id.btn_send_msg);
-        userMessage = (EditText)findViewById(R.id.f_message);
 
         btnSend.setOnClickListener(this);
 
@@ -99,20 +97,14 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_send_msg:
-                String message = userMessage.getText().toString().trim();
+
                 if(!isPebbleConnected){
                     Toast.makeText(getApplicationContext(),"Pebble is not connected",Toast.LENGTH_LONG).show();
                     return;
                 }
 
-                if(message.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "Message is empty", Toast.LENGTH_LONG).show();
-                    return;
-                }
+                HardwareUtils.sendUpdateToPebble(this);
 
-                HardwareUtils.sendUpdateToPebble(this,message);
-
-                userMessage.setText("");
                 Toast.makeText(getApplicationContext(), "Message has been sent", Toast.LENGTH_LONG).show();
                 break;
 
