@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
@@ -20,6 +21,7 @@ import com.getpebble.android.kit.util.PebbleDictionary;
 import com.sukinsan.pebble.R;
 import com.sukinsan.pebble.application.PebbleApplication;
 import com.sukinsan.pebble.broadcast.BootReceiver;
+import com.sukinsan.pebble.broadcast.PhoneStateChangedReceiver;
 import com.sukinsan.pebble.utils.HardwareUtils;
 
 import java.util.UUID;
@@ -42,9 +44,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
-        //startActivity(browserIntent);
 
         HardwareUtils.runCron(getApplicationContext());
 
@@ -98,7 +97,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 getApplicationContext().unregisterReceiver(pebbleDisconnectedReciever);
             }
         }catch(Exception e){
-            
+
         }
     }
 
@@ -131,7 +130,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         }
     }
-
 
     @Override
     protected void onResume() {

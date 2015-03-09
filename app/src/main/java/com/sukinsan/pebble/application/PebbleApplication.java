@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 
-import com.sukinsan.pebble.service.WatchUpdaterService;
-
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -19,25 +17,8 @@ public class PebbleApplication extends Application {
 
     public static final ObjectMapper MAPPER = new ObjectMapper().configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-    public Handler serviceHandler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch(msg.what){
-                case SEND_UPDATE:
-                    startService(new Intent(getApplicationContext(), WatchUpdaterService.class));
-                    sendEmptyMessageDelayed(SEND_UPDATE,DELAY_SEND_UPDATE);
-                    break;
-            }
-        }
-    };
-
     @Override
     public void onCreate() {
         super.onCreate();
-
-        //serviceHandler.removeMessages(SEND_UPDATE);
-        //serviceHandler.sendEmptyMessageDelayed(SEND_UPDATE,DELAY_SEND_UPDATE);// run with delay
-        //startService(new Intent(getApplicationContext(), WatchUpdaterService.class)); // run now
     }
 }

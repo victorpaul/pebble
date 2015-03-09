@@ -3,22 +3,20 @@ package com.sukinsan.pebble.broadcast;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
+import com.getpebble.android.kit.PebbleKit;
 import com.sukinsan.pebble.utils.HardwareUtils;
-
-import java.util.Date;
 
 /**
  * Created by victorpaul on 23/1/15.
  */
-public class AlarmReceiver extends BroadcastReceiver {
-    public final static String TAG = AlarmReceiver.class.getSimpleName();
+public class PhoneStateChangedReceiver extends BroadcastReceiver {
+    public final static String TAG = PhoneStateChangedReceiver.class.getSimpleName();
 
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        if(HardwareUtils.isItOkToSensUpdateFromBackground(context.getApplicationContext())) {
+        if( PebbleKit.isWatchConnected(context)) {
             HardwareUtils.sendUpdateToPebble(context.getApplicationContext());
         }
     }
