@@ -18,7 +18,6 @@ public class Cache {
 
     private List<Integer> lastBatteryInfo = new ArrayList<Integer>();
     private int lastNetwork = HardwareUtils.KEY_NETWORK_OFF;
-    private String lastDateStatus = "";
     private Weather weather = null;
 
     public Cache() {}
@@ -39,14 +38,6 @@ public class Cache {
         this.lastNetwork = lastNetwork;
     }
 
-    public String getLastDateStatus() {
-        return lastDateStatus;
-    }
-
-    public void setLastDateStatus(String lastDateStatus) {
-        this.lastDateStatus = lastDateStatus;
-    }
-
     public Weather getWeather() {
         return weather;
     }
@@ -60,7 +51,6 @@ public class Cache {
         return "Cache{" +
                 "lastBatteryInfo=" + lastBatteryInfo +
                 ", lastNetwork=" + lastNetwork +
-                ", lastDateStatus='" + lastDateStatus + '\'' +
                 ", weather=" + weather +
                 '}';
     }

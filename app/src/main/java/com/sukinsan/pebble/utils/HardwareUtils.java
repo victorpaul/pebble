@@ -47,7 +47,6 @@ public class HardwareUtils {
     public final static int KEY_NETWORK_OFF = 204;
 
     public final static int KEY_WEATHER = 300;
-    public final static int KEY_DATE = 400;
 
 
     public static List<Integer> getBatteryInfo(Context context){
@@ -113,11 +112,6 @@ public class HardwareUtils {
                 //if(networkStatus != cache.getLastNetwork()) {
                     cache.setLastNetwork(networkStatus);
                     data.addUint8(networkStatus, (byte) 0);
-                //}
-
-                //if(!cache.getLastDateStatus().equals(date)){
-                    cache.setLastDateStatus(date);
-                    data.addString(KEY_DATE,date);
                 //}
 
                 if(cache.getWeather() == null || cache.getWeather().getLastUpdate() + UPDATE_WEATHER_INTERVAL < System.currentTimeMillis()){
