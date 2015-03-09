@@ -18,7 +18,9 @@ import com.sukinsan.pebble.entity.Cache;
 import com.sukinsan.pebble.task.GetWeatherTask;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -33,79 +35,90 @@ public class HardwareUtils {
     public final static int UPDATE_WEATHER_INTERVAL_PEBBLE = 1000 * 60 * 1;
     public final static int UPDATE_INTERVAL = 1000 * 60 * 2;
 
-    public final static int KEY_DATE = 1;
-    public final static int KEY_NETWORK = 2;
-    public final static int KEY_BATTERY = 3;
-    public final static int KEY_WEATHER = 4;
-    public final static int KEY_DATA = 5;
+    public final static int BATTERY_LEVEL_MIN = 1;
+    public final static int BATTERY_LEVEL_MAX = 100;
+    public final static int BATTERY_CHARGING_NONE = 101;
+    public final static int BATTERY_CHARGING_USB = 102;
+    public final static int BATTERY_CHARGING_SET = 103;
+
+    public final static int KEY_NETWORK_WIFI = 201;
+    public final static int KEY_NETWORK_MOBILE = 202;
+    public final static int KEY_NETWORK_WIFI_MOBILE = 203;
+    public final static int KEY_NETWORK_OFF = 204;
+
+    public final static int KEY_WEATHER = 300;
+    public final static int KEY_DATE = 400;
 
     public final static UUID PEBBLE_APP_UUID = UUID.fromString(PEBBLE_APP_ID);
 
-    public static String getBatteryStatus(Context context){
-        IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        Intent batteryStatus = context.registerReceiver(null, ifilter);
+    public static List<Integer> getBatteryInfo(Context context){
+        List<Integer> response = new ArrayList<Integer>(); // we are expecting only two parameters
 
-        // How are we charging?
-        int chargePlug = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
-        boolean usbCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_USB;
-        boolean acCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_AC;
+        Intent batteryStatus = context.registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        int chargePlug = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED,-1);
 
         int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-
-        StringBuilder statusString = new StringBuilder(level + "%");
-
-        if(usbCharge){
-            statusString.append("(usb)");
+        if(level <= BATTERY_LEVEL_MAX || level >= BATTERY_LEVEL_MIN){
+            response.add(level);
         }
 
-        if(acCharge){
-            statusString.append("(ac)");
+        if(chargePlug == BatteryManager.BATTERY_PLUGGED_USB){
+            response.add(BATTERY_CHARGING_USB);
+        }else if(chargePlug == BatteryManager.BATTERY_PLUGGED_AC){
+            response.add(BATTERY_CHARGING_SET);
+        }else{
+            response.add(BATTERY_CHARGING_NONE);
         }
 
-        return statusString.toString();
+        return response;
     }
 
     public static boolean isItOkToSensUpdateFromBackground(Context applicationContext){
         return PebbleKit.isWatchConnected(applicationContext);
     }
 
-    public static String getNetworkStatus(Context context){
+    public static int getNetworkStatus(Context context){
         ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         if(activeNetwork != null && activeNetwork.isConnectedOrConnecting()){
             if(activeNetwork.getType() == ConnectivityManager.TYPE_WIFI){
-                return "wifi";
+                return KEY_NETWORK_WIFI;
             }else{
                 WifiManager wifi = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
                 if (wifi.isWifiEnabled()){
-                    return "mob(wifi)";
+                    return KEY_NETWORK_WIFI_MOBILE;
                 }else{
-                    return "mobile";
+                    return KEY_NETWORK_MOBILE;
                 }
             }
         }else{
-            return "O_o";
+            return KEY_NETWORK_OFF;
         }
     }
 
     public static void sendUpdateToPebble(final Context context){
         final PebbleDictionary data = new PebbleDictionary();
-        final String batteryLevel = HardwareUtils.getBatteryStatus(context);
-        final String networkStatus = getNetworkStatus(context);
+        final List<Integer> batteryInfo = HardwareUtils.getBatteryInfo(context);
+        final int networkStatus = getNetworkStatus(context);
         final String date = (new SimpleDateFormat("EEE d, MMM")).format(new Date()).toString();
 
         SystemUtils.getCache(context,new Cache.CallBack() {
             @Override
             public void run(Cache cache) {
-                if(!cache.getLastBatteryLevel().equals(batteryLevel)) {
-                    cache.setLastBatteryLevel(batteryLevel);
-                    data.addString(KEY_BATTERY, batteryLevel);
+
+                if(!batteryInfo.equals(cache.getLastBatteryInfo())) {
+                    cache.setLastBatteryInfo(batteryInfo);
+                    for (int i = 0; i < batteryInfo.size(); i++) {
+                        data.addUint8(batteryInfo.get(i), (byte) 0);
+                    }
                 }
-                if(!cache.getLastNetwork().equals(networkStatus)) {
+
+                if(networkStatus != cache.getLastNetwork()) {
                     cache.setLastNetwork(networkStatus);
-                    data.addString(KEY_NETWORK, networkStatus);
+                    data.addUint8(networkStatus, (byte) 0);
                 }
+
                 if(!cache.getLastDateStatus().equals(date)){
                     cache.setLastDateStatus(date);
                     data.addString(KEY_DATE,date);
@@ -123,14 +136,13 @@ public class HardwareUtils {
         },false);
 
         if(data.size() > 0 ) {
-
             SystemUtils.saveCache(context);
             PebbleKit.sendDataToPebble(context, PEBBLE_APP_UUID, data);
+            //PebbleKit.sendDataToPebbleWithTransactionId(context, PEBBLE_APP_UUID, data);
         }
     }
 
     public static void runCron(Context context){
-        Log.i(TAG, "runCron(Context context)");
         AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmReceiver.class);
         PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);

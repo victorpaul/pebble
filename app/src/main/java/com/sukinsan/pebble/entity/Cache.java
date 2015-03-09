@@ -1,6 +1,12 @@
 package com.sukinsan.pebble.entity;
 
+import com.sukinsan.pebble.utils.HardwareUtils;
+
 import org.json.JSONException;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by victorpaul on 2/2/15.
@@ -10,35 +16,26 @@ public class Cache {
         public void run(Cache cache);
     }
 
-    private String lastBatteryLevel = "";
-    private String lastNetwork = "";
+    private List<Integer> lastBatteryInfo = new ArrayList<Integer>();
+    private int lastNetwork = HardwareUtils.KEY_NETWORK_OFF;
     private String lastDateStatus = "";
-
-    private Weather weather;
-
-    public Weather getWeather() {
-        return weather;
-    }
-
-    public void setWeather(Weather weather) {
-        this.weather = weather;
-    }
+    private Weather weather = null;
 
     public Cache() {}
 
-    public String getLastBatteryLevel() {
-        return lastBatteryLevel;
+    public List<Integer> getLastBatteryInfo() {
+        return lastBatteryInfo;
     }
 
-    public void setLastBatteryLevel(String lastBatteryLevel) {
-        this.lastBatteryLevel = lastBatteryLevel;
+    public void setLastBatteryInfo(List<Integer> lastBatteryInfo) {
+        this.lastBatteryInfo = lastBatteryInfo;
     }
 
-    public String getLastNetwork() {
+    public int getLastNetwork() {
         return lastNetwork;
     }
 
-    public void setLastNetwork(String lastNetwork) {
+    public void setLastNetwork(int lastNetwork) {
         this.lastNetwork = lastNetwork;
     }
 
@@ -50,11 +47,19 @@ public class Cache {
         this.lastDateStatus = lastDateStatus;
     }
 
+    public Weather getWeather() {
+        return weather;
+    }
+
+    public void setWeather(Weather weather) {
+        this.weather = weather;
+    }
+
     @Override
     public String toString() {
         return "Cache{" +
-                "lastBatteryLevel='" + lastBatteryLevel + '\'' +
-                ", lastNetwork='" + lastNetwork + '\'' +
+                "lastBatteryInfo=" + lastBatteryInfo +
+                ", lastNetwork=" + lastNetwork +
                 ", lastDateStatus='" + lastDateStatus + '\'' +
                 ", weather=" + weather +
                 '}';
