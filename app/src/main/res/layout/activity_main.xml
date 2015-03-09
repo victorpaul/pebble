@@ -27,11 +27,7 @@
             android:text="Send a update"
             style="@style/AppTheme.defaultButton"
         />
-        <Button
-            android:id="@+id/btn_alarm_manager"
-            android:text="Enable/Disable Alarm Manager"
-            style="@style/AppTheme.defaultButton"
-        />
+
     </LinearLayout>
 
 

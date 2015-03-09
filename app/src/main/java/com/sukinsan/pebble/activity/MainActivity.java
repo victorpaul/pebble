@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.getpebble.android.kit.PebbleKit;
 import com.getpebble.android.kit.util.PebbleDictionary;
 import com.sukinsan.pebble.R;
+import com.sukinsan.pebble.application.PebbleApplication;
 import com.sukinsan.pebble.broadcast.BootReceiver;
 import com.sukinsan.pebble.utils.HardwareUtils;
 
@@ -28,6 +29,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public final static String TAG = MainActivity.class.getSimpleName();
 
     private boolean isPebbleConnected = false;
+
+    private BroadcastReceiver pebbleConnectedReciever = null;
+    private BroadcastReceiver pebbleDataReciever = null;
+    private BroadcastReceiver pebbleDisconnectedReciever = null;
 
     private View statusConnected;
     private View statusDisconnected;
@@ -50,34 +55,50 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         btnSend.setOnClickListener(this);
 
         setPebbleStatus(PebbleKit.isWatchConnected(getApplicationContext()));
-        registerPebbleBroadcasts();
     }
 
     public void registerPebbleBroadcasts(){
         try {
-            PebbleKit.registerPebbleConnectedReceiver(getApplicationContext(), new BroadcastReceiver() {
+            pebbleConnectedReciever = PebbleKit.registerPebbleConnectedReceiver(getApplicationContext(), new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
                 setPebbleStatus(true);
                 }
             });
 
-            PebbleKit.registerPebbleDisconnectedReceiver(getApplicationContext(), new BroadcastReceiver() {
+            pebbleDisconnectedReciever = PebbleKit.registerPebbleDisconnectedReceiver(getApplicationContext(), new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
                 setPebbleStatus(false);
                 }
             });
 
-            PebbleKit.registerReceivedDataHandler(this, new PebbleKit.PebbleDataReceiver(HardwareUtils.PEBBLE_APP_UUID) {
+            pebbleDataReciever = PebbleKit.registerReceivedDataHandler(this, new PebbleKit.PebbleDataReceiver(HardwareUtils.PEBBLE_APP_UUID) {
                 @Override
                 public void receiveData(final Context context, final int transactionId, final PebbleDictionary data) {
                     Log.i(getLocalClassName(), "Received value=" + data.getString(0) + " for key: 0");
                     PebbleKit.sendAckToPebble(getApplicationContext(), transactionId);
                 }
             });
+
         }catch(Exception e){
 
+        }
+    }
+
+    public void unRegisterPebbleBroadcasts(){
+        try {
+            if (pebbleConnectedReciever != null) {
+                getApplicationContext().unregisterReceiver(pebbleConnectedReciever);
+            }
+            if (pebbleDataReciever != null) {
+                getApplicationContext().unregisterReceiver(pebbleDataReciever);
+            }
+            if (pebbleDisconnectedReciever != null) {
+                getApplicationContext().unregisterReceiver(pebbleDisconnectedReciever);
+            }
+        }catch(Exception e){
+            
         }
     }
 
@@ -110,4 +131,19 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         }
     }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerPebbleBroadcasts();
+    }
+
+    @Override
+    protected void onPause() {
+        unRegisterPebbleBroadcasts();
+        super.onPause();
+    }
+
+
 }
