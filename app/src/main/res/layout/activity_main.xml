@@ -22,6 +22,12 @@
             style="@style/AppTheme.statusTextPositive"
         />
 
+        <Button
+            android:id="@+id/btn_install_pebble_app"
+            android:text="Install/Reinstall pebble app"
+            style="@style/AppTheme.defaultButton"
+        />
+
         <TextView
             android:padding="10dp"
             android:text="Amazing content gonna be here.... soon"

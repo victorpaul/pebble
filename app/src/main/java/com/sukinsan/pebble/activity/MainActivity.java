@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -24,7 +25,12 @@ import com.sukinsan.pebble.application.PebbleApplication;
 import com.sukinsan.pebble.broadcast.BootReceiver;
 import com.sukinsan.pebble.broadcast.PhoneStateChangedReceiver;
 import com.sukinsan.pebble.utils.HardwareUtils;
+import com.sukinsan.pebble.utils.SystemUtils;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.UUID;
 
 
@@ -39,6 +45,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     private View statusConnected;
     private View statusDisconnected;
+    private View buttonInstall;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +57,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         statusConnected = findViewById(R.id.txt_pebble_is_connected);
         statusDisconnected = findViewById(R.id.txt_pebble_is_not_connected);
 
-        //findViewById(R.id.btn_send_msg).setOnClickListener(this);
-        //findViewById(R.id.btn_enable_airplaine).setOnClickListener(this);
+        buttonInstall = findViewById(R.id.btn_install_pebble_app);
+        buttonInstall.setOnClickListener(this);
+        //findViewById(R.id.enable_airplane).setOnClickListener(this);
         //findViewById(R.id.btn_disable_airplaine).setOnClickListener(this);
+
 
 
         setPebbleStatus(PebbleKit.isWatchConnected(getApplicationContext()));
@@ -108,10 +117,12 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             isPebbleConnected = true;
             statusConnected.setVisibility(View.VISIBLE);
             statusDisconnected.setVisibility(View.GONE);
+            buttonInstall.setVisibility(View.VISIBLE);
         }else{
             isPebbleConnected = false;
             statusConnected.setVisibility(View.GONE);
             statusDisconnected.setVisibility(View.VISIBLE);
+            buttonInstall.setVisibility(View.GONE);
         }
     }
 
@@ -119,7 +130,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public void onClick(View v) {
         Intent airPlaneIntent = new Intent(Intent.ACTION_AIRPLANE_MODE_CHANGED);
         switch (v.getId()){
-
+            case R.id.btn_install_pebble_app:
+                HardwareUtils.sendAppToWatch(this);
+                break;
         }
     }
 
