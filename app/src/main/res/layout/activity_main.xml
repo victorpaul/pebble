@@ -22,10 +22,10 @@
             style="@style/AppTheme.statusTextPositive"
         />
 
-        <Button
-            android:id="@+id/btn_send_msg"
-            android:text="Send a update"
-            style="@style/AppTheme.defaultButton"
+        <TextView
+            android:padding="10dp"
+            android:text="Amazing content gonna be here.... soon"
+            style="@style/AppTheme.defaultText"
         />
 
     </LinearLayout>

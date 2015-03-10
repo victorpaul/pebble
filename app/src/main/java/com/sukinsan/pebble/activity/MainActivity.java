@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,7 +39,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     private View statusConnected;
     private View statusDisconnected;
-    private View btnSend;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +49,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         statusConnected = findViewById(R.id.txt_pebble_is_connected);
         statusDisconnected = findViewById(R.id.txt_pebble_is_not_connected);
-        btnSend = findViewById(R.id.btn_send_msg);
 
-        btnSend.setOnClickListener(this);
+        //findViewById(R.id.btn_send_msg).setOnClickListener(this);
+        //findViewById(R.id.btn_enable_airplaine).setOnClickListener(this);
+        //findViewById(R.id.btn_disable_airplaine).setOnClickListener(this);
+
 
         setPebbleStatus(PebbleKit.isWatchConnected(getApplicationContext()));
     }
@@ -115,18 +117,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        Intent airPlaneIntent = new Intent(Intent.ACTION_AIRPLANE_MODE_CHANGED);
         switch (v.getId()){
-            case R.id.btn_send_msg:
-
-                if(!isPebbleConnected){
-                    Toast.makeText(getApplicationContext(),"Pebble is not connected",Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                HardwareUtils.sendUpdateToPebble(this);
-
-                Toast.makeText(getApplicationContext(), "Message has been sent", Toast.LENGTH_LONG).show();
-                break;
 
         }
     }
