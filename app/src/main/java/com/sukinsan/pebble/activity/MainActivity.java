@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
@@ -59,7 +60,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         buttonInstall = findViewById(R.id.btn_install_pebble_app);
         buttonInstall.setOnClickListener(this);
-        //findViewById(R.id.enable_airplane).setOnClickListener(this);
+        //findViewById(R.id.btn_airplaneMode).setOnClickListener(this);
         //findViewById(R.id.btn_disable_airplaine).setOnClickListener(this);
 
 
@@ -147,6 +148,4 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         unRegisterPebbleBroadcasts();
         super.onPause();
     }
-
-
 }

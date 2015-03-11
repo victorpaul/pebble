@@ -39,7 +39,7 @@ public class HardwareUtils {
     public final static UUID PEBBLE_APP_UUID = UUID.fromString(PEBBLE_APP_ID);
 
     public final static double ON_BOARD_PEBBLE_APP_VERSION = 1.0;
-    public final static String ON_BOARD_PEBBLE_APP_FILENAME = "app.pbw";
+    public final static String ON_BOARD_PEBBLE_APP_FILENAME = "Friendly_Watch.pbw";
 
     public final static int UPDATE_WEATHER_INTERVAL = 1000 * 60 * 60; // every hour
     public final static int UPDATE_INTERVAL = 1000 * 60 * 2; // update every 10 minutes manually
