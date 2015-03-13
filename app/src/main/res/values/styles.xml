@@ -4,42 +4,26 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:textViewStyle">@style/TextViewStyle</item>
         <item name="android:buttonStyle">@style/ButtonStyle</item>
-        <item name="android:editTextStyle">@style/EditTextStyle</item>
+        <item name="android:windowBackground">@android:color/white</item>
     </style>
 
     <style name="TextViewStyle" parent="android:Widget.TextView">
+        <item name="android:padding">10dp</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:textColor">@android:color/black</item>
         <item name="typeface">fonts/Free_Pixel.ttf</item>
-    </style>
-
-    <style name="EditTextStyle" parent="android:Widget.EditText">
-        <item name="typeface">fonts/Free_Pixel.ttf</item>
-    </style>
-
-    <style name="ButtonStyle" parent="android:Widget.Button">
-        <item name="typeface">fonts/Free_Pixel.ttf</item>
-    </style>
-
-    <style name="AppTheme.defaultText">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">22sp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
 
-    <style name="AppTheme.defaultButton" parent="AppTheme.defaultText">
-
+    <style name="ButtonStyle" parent="android:Widget.Button">
+        <item name="android:textSize">30sp</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:background">@drawable/pixel_button</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="typeface">fonts/Free_Pixel.ttf</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
-
-    <style name="AppTheme.statusTextPositive" parent="AppTheme.defaultText">
-        <item name="android:background">#00ff00</item>
-        <item name="android:gravity">center</item>
-        <item name="android:padding">10dp</item>
-
-    </style>
-
-    <style name="AppTheme.statusTextNegative" parent="AppTheme.statusTextPositive">
-        <item name="android:background">#ff0000</item>
-    </style>
-
 
 </resources>
