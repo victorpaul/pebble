@@ -7,12 +7,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.getpebble.android.kit.PebbleKit;
 import com.getpebble.android.kit.util.PebbleDictionary;
 import com.sukinsan.pebble.R;
+import com.sukinsan.pebble.entity.Cache;
 import com.sukinsan.pebble.utils.HardwareUtils;
+import com.sukinsan.pebble.utils.SystemUtils;
 
 
 public class MainActivity extends Activity implements View.OnClickListener {
@@ -26,6 +30,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private TextView pebbleStatus;
     private View buttonInstall;
+    private CheckBox checkBoxShutDownWiFi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +43,25 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         buttonInstall = findViewById(R.id.btn_install_pebble_app);
         buttonInstall.setOnClickListener(this);
+
+        checkBoxShutDownWiFi = (CheckBox)findViewById(R.id.checkbox_shutdown_wifi);
+        SystemUtils.getCache(MainActivity.this,new Cache.CallBack() {
+            @Override
+            public void run(Cache cache) {
+                checkBoxShutDownWiFi.setChecked(cache.isShutDownWiFi());
+            }
+        },false);
+        checkBoxShutDownWiFi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
+                SystemUtils.getCache(MainActivity.this,new Cache.CallBack() {
+                    @Override
+                    public void run(Cache cache) {
+                        cache.setShutDownWiFi(isChecked);
+                    }
+                },true);
+            }
+        });
 
         setPebbleStatus(PebbleKit.isWatchConnected(getApplicationContext()));
     }

@@ -90,12 +90,7 @@ public class HardwareUtils {
             if(activeNetwork.getType() == ConnectivityManager.TYPE_WIFI){
                 return KEY_NETWORK_WIFI;
             }else{
-                WifiManager wifi = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
-                if (wifi.isWifiEnabled()){
-                    return KEY_NETWORK_WIFI_MOBILE;
-                }else{
-                    return KEY_NETWORK_MOBILE;
-                }
+                return KEY_NETWORK_MOBILE;
             }
         }else{
             return KEY_NETWORK_OFF;
@@ -104,36 +99,38 @@ public class HardwareUtils {
 
     public static void sendUpdateToPebble(final Context context){
         final PebbleDictionary data = new PebbleDictionary();
-        final List<Integer> batteryInfo = HardwareUtils.getBatteryInfo(context);
-        final int networkStatus = getNetworkStatus(context);
-        final String date = (new SimpleDateFormat("EEE d, MMM")).format(new Date()).toString();
+        final boolean isPebbleConnected = PebbleKit.isWatchConnected(context);
 
         SystemUtils.getCache(context,new Cache.CallBack() {
             @Override
             public void run(Cache cache) {
+                int networkStatus = getNetworkStatus(context);
 
-                //if(!batteryInfo.equals(cache.getLastBatteryInfo())) {
+                if(cache.isShutDownWiFi() && cache.getLastNetwork() == KEY_NETWORK_WIFI &&  networkStatus == KEY_NETWORK_MOBILE) {
+                    setWifiState(context, false);
+                }
+                cache.setLastNetwork(networkStatus);
+
+                if(isPebbleConnected) {
+                    data.addUint8(networkStatus, (byte) 0);
+
+                    List<Integer> batteryInfo = HardwareUtils.getBatteryInfo(context);
                     cache.setLastBatteryInfo(batteryInfo);
                     for (int i = 0; i < batteryInfo.size(); i++) {
                         data.addUint8(batteryInfo.get(i), (byte) 0);
                     }
-                //}
 
-                //if(networkStatus != cache.getLastNetwork()) {
-                    cache.setLastNetwork(networkStatus);
-                    data.addUint8(networkStatus, (byte) 0);
-                //}
-
-                if(cache.getWeather() == null || cache.getWeather().getLastUpdate() + UPDATE_WEATHER_INTERVAL < System.currentTimeMillis()){
-                    new GetWeatherTask(context).execute();
-                }else{
-                    data.addString(KEY_WEATHER,cache.getWeather().getDescription());
+                    if(cache.getWeather() == null || cache.getWeather().getLastUpdate() + UPDATE_WEATHER_INTERVAL < System.currentTimeMillis()){
+                        new GetWeatherTask(context).execute();
+                    }else{
+                        data.addString(KEY_WEATHER,cache.getWeather().getDescription());
+                    }
                 }
 
             }
         },false);
 
-        if(data.size() > 0 ) {
+        if(isPebbleConnected && data.size() > 0 ) {
             SystemUtils.saveCache(context);
             PebbleKit.sendDataToPebble(context, PEBBLE_APP_UUID, data);
         }
@@ -176,6 +173,11 @@ public class HardwareUtils {
         } catch (Exception e) {
             Toast.makeText(context, "Oops.....", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public static void setWifiState(Context context,boolean state){
+        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        wifiManager.setWifiEnabled(state);
     }
 
 }

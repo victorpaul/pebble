@@ -16,8 +16,7 @@ public class PhoneStateChangedReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        if( PebbleKit.isWatchConnected(context)) {
-            HardwareUtils.sendUpdateToPebble(context.getApplicationContext());
-        }
+        HardwareUtils.sendUpdateToPebble(context.getApplicationContext());
+
     }
 }

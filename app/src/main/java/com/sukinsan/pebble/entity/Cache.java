@@ -20,6 +20,8 @@ public class Cache {
     private int lastNetwork = HardwareUtils.KEY_NETWORK_OFF;
     private Weather weather = null;
 
+    private boolean shutDownWiFi = false;
+
     public Cache() {}
 
     public List<Integer> getLastBatteryInfo() {
@@ -46,12 +48,21 @@ public class Cache {
         this.weather = weather;
     }
 
+    public boolean isShutDownWiFi() {
+        return shutDownWiFi;
+    }
+
+    public void setShutDownWiFi(boolean shutDownWiFi) {
+        this.shutDownWiFi = shutDownWiFi;
+    }
+
     @Override
     public String toString() {
         return "Cache{" +
                 "lastBatteryInfo=" + lastBatteryInfo +
                 ", lastNetwork=" + lastNetwork +
                 ", weather=" + weather +
+                ", shutDownWiFi=" + shutDownWiFi +
                 '}';
     }
 }
