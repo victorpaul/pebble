@@ -5,6 +5,8 @@
         <item name="android:textViewStyle">@style/TextViewStyle</item>
         <item name="android:buttonStyle">@style/ButtonStyle</item>
         <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
     </style>
 
     <style name="TextViewStyle" parent="android:Widget.TextView">
@@ -17,10 +19,10 @@
     </style>
 
     <style name="ButtonStyle" parent="android:Widget.Button">
+        <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">30sp</item>
         <item name="android:padding">5dp</item>
         <item name="android:background">@drawable/pixel_button</item>
-        <item name="android:textColor">@android:color/black</item>
         <item name="typeface">fonts/Free_Pixel.ttf</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
