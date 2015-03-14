@@ -17,15 +17,12 @@ import com.getpebble.android.kit.PebbleKit;
 import com.getpebble.android.kit.util.PebbleDictionary;
 import com.sukinsan.pebble.broadcast.PhoneStateChangedReceiver;
 import com.sukinsan.pebble.entity.Cache;
-import com.sukinsan.pebble.task.GetWeatherTask;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,7 +39,9 @@ public class HardwareUtils {
     public final static String ON_BOARD_PEBBLE_APP_FILENAME = "Friendly_Watch.pbw";
 
     public final static int UPDATE_WEATHER_INTERVAL = 1000 * 60 * 60; // every hour
-    public final static int UPDATE_INTERVAL = 1000 * 60 * 2; // update every 10 minutes manually
+
+    public final static int UPDATE_INTERVAL_MINIMAL = 1000 * 5;
+    public final static int UPDATE_INTERVAL = 1000 * 60 * 2;
 
     public final static int BATTERY_LEVEL_MIN = 1;
     public final static int BATTERY_LEVEL_MAX = 100;
@@ -53,7 +52,6 @@ public class HardwareUtils {
 
     public final static int KEY_NETWORK_WIFI = 201;
     public final static int KEY_NETWORK_MOBILE = 202;
-    public final static int KEY_NETWORK_WIFI_MOBILE = 203;
     public final static int KEY_NETWORK_OFF = 204;
 
     public final static int KEY_WEATHER = 300;
@@ -84,7 +82,6 @@ public class HardwareUtils {
 
     public static int getNetworkStatus(Context context){
         ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         if(activeNetwork != null && activeNetwork.isConnectedOrConnecting()){
             if(activeNetwork.getType() == ConnectivityManager.TYPE_WIFI){
@@ -97,43 +94,22 @@ public class HardwareUtils {
         }
     }
 
-    public static void sendUpdateToPebble(final Context context){
-        final PebbleDictionary data = new PebbleDictionary();
-        final boolean isPebbleConnected = PebbleKit.isWatchConnected(context);
-
-        SystemUtils.getCache(context,new Cache.CallBack() {
-            @Override
-            public void run(Cache cache) {
-                int networkStatus = getNetworkStatus(context);
-
-                if(cache.isShutDownWiFi() && cache.getLastNetwork() == KEY_NETWORK_WIFI &&  networkStatus == KEY_NETWORK_MOBILE) {
-                    setWifiState(context, false);
-                }
-                cache.setLastNetwork(networkStatus);
-
-                if(isPebbleConnected) {
-                    data.addUint8(networkStatus, (byte) 0);
-
-                    List<Integer> batteryInfo = HardwareUtils.getBatteryInfo(context);
-                    cache.setLastBatteryInfo(batteryInfo);
-                    for (int i = 0; i < batteryInfo.size(); i++) {
-                        data.addUint8(batteryInfo.get(i), (byte) 0);
-                    }
-
-                    if(cache.getWeather() == null || cache.getWeather().getLastUpdate() + UPDATE_WEATHER_INTERVAL < System.currentTimeMillis()){
-                        new GetWeatherTask(context).execute();
-                    }else{
-                        data.addString(KEY_WEATHER,cache.getWeather().getDescription());
-                    }
-                }
-
-            }
-        },false);
-
-        if(isPebbleConnected && data.size() > 0 ) {
-            SystemUtils.saveCache(context);
-            PebbleKit.sendDataToPebble(context, PEBBLE_APP_UUID, data);
+    public static void sendUpdateToPebble(Cache cache,Context context){
+        if(!PebbleKit.isWatchConnected(context)){
+            return;
         }
+        PebbleDictionary data = new PebbleDictionary();
+
+        data.addUint8(cache.getLastNetwork(), (byte) 0);
+        for (int i = 0; i < cache.getLastBatteryInfo().size(); i++) {
+            data.addUint8(cache.getLastBatteryInfo().get(i), (byte) 0);
+        }
+
+        if(cache.getWeather() != null){
+            data.addString(KEY_WEATHER,cache.getWeather().getDescription());
+        }
+
+        PebbleKit.sendDataToPebble(context, PEBBLE_APP_UUID, data);
     }
 
     public static void runCron(Context context){
@@ -154,12 +130,12 @@ public class HardwareUtils {
             File file = new File(Environment.getExternalStorageDirectory(), HardwareUtils.ON_BOARD_PEBBLE_APP_FILENAME);
             file.setReadable(true, false);
             OutputStream output = new FileOutputStream(file);
-            try {
+            try  {
                 byte[] buffer = new byte[1024];
                 int read;
                 while ((read = input.read(buffer)) != -1) {
-                    output.write(buffer, 0, read);
-                }
+                output.write(buffer, 0, read);
+            }
                 output.flush();
             } finally {
                 output.close();
@@ -168,7 +144,6 @@ public class HardwareUtils {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setClassName("com.getpebble.android", "com.getpebble.android.ui.UpdateActivity");
             intent.setDataAndType(Uri.fromFile(file), "application/octet-stream");
-            //startActivityForResult(intent, ID_ACTIVITY_UPDATEWATCHAPP);
             context.startActivity(intent);
         } catch (Exception e) {
             Toast.makeText(context, "Oops.....", Toast.LENGTH_LONG).show();

@@ -31,6 +31,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private TextView pebbleStatus;
     private View buttonInstall;
     private CheckBox checkBoxShutDownWiFi;
+    private CheckBox checkShowReadme;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,18 +41,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         HardwareUtils.runCron(getApplicationContext());
 
+        // pebble connecting status
         pebbleStatus = (TextView)findViewById(R.id.txt_pebble_status);
 
+        // to install pebble app on pebble watch
         buttonInstall = findViewById(R.id.btn_install_pebble_app);
         buttonInstall.setOnClickListener(this);
 
+        // set up wifi shutting down
         checkBoxShutDownWiFi = (CheckBox)findViewById(R.id.checkbox_shutdown_wifi);
-        SystemUtils.getCache(MainActivity.this,new Cache.CallBack() {
-            @Override
-            public void run(Cache cache) {
-                checkBoxShutDownWiFi.setChecked(cache.isShutDownWiFi());
-            }
-        },false);
         checkBoxShutDownWiFi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
@@ -62,6 +61,33 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 },true);
             }
         });
+
+        // set up showing of reead me
+        checkShowReadme = (CheckBox)findViewById(R.id.checkbox_show_show_readme);
+        checkShowReadme.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
+                SystemUtils.getCache(MainActivity.this,new Cache.CallBack() {
+                    @Override
+                    public void run(Cache cache) {
+                        cache.setShowReadMe(isChecked);
+                    }
+                },true);
+            }
+        });
+
+        // set up default values for checkboxes
+        SystemUtils.getCache(MainActivity.this,new Cache.CallBack() {
+            @Override
+            public void run(Cache cache) {
+                checkBoxShutDownWiFi.setChecked(cache.isShutDownWiFi());
+                checkShowReadme.setChecked(cache.isShowReadMe());
+
+                if(cache.isShowReadMe() == false){
+                    findViewById(R.id.txt_read_me).setVisibility(View.GONE);
+                }
+            }
+        },false);
 
         setPebbleStatus(PebbleKit.isWatchConnected(getApplicationContext()));
     }

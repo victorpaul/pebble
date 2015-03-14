@@ -24,13 +24,6 @@
             android:layout_height="wrap_content"
         />
 
-        <com.rightutils.rightutils.widgets.TypefaceCheckbox
-            android:id="@+id/checkbox_shutdown_wifi"
-            android:text="if wifi lost signal and mobile network activated - shut down wi-fi"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-        />
-        
         <View
             android:layout_marginTop="5dp"
             android:background="#ccc"
@@ -41,11 +34,34 @@
             android:layout_width="match_parent"
             android:layout_height="0dp">
 
-            <com.rightutils.rightutils.widgets.TypefaceTextView
-                android:text="@string/txt_introduction"
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-            />
+                android:layout_height="wrap_content">
+
+                <com.rightutils.rightutils.widgets.TypefaceTextView
+                    android:id="@+id/txt_read_me"
+                    android:text="@string/txt_introduction"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                />
+
+                <com.rightutils.rightutils.widgets.TypefaceCheckbox
+                    android:id="@+id/checkbox_shutdown_wifi"
+                    android:text="@string/action_shut_down_wifi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                />
+
+                <com.rightutils.rightutils.widgets.TypefaceCheckbox
+                    android:id="@+id/checkbox_show_show_readme"
+                    android:text="show read me on the next launch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                />
+            </LinearLayout>
+
+
 
         </ScrollView>
     </LinearLayout>
