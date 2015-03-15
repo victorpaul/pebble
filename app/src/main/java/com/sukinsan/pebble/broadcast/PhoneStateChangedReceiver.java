@@ -19,7 +19,12 @@ public class PhoneStateChangedReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
-       Log.i(TAG, intent.getAction());
+
+        if(intent.getAction() != null){
+            Log.i(TAG,intent.getAction());
+        }else{
+            Log.i(TAG,"no action");
+        }
 
         SystemUtils.getCache(context,new Cache.CallBack() {
             @Override
@@ -29,7 +34,8 @@ public class PhoneStateChangedReceiver extends BroadcastReceiver {
                     return;
                 }
 
-                if(intent.getAction().equals("android.net.conn.CONNECTIVITY_CHANGE")){ // NETWORK CHANGED
+
+                if(intent.getAction() != null && intent.getAction().equals("android.net.conn.CONNECTIVITY_CHANGE")){ // NETWORK CHANGED
                     int network = HardwareUtils.getNetworkStatus(context);
 
                     if(cache.isShutDownWiFi() && cache.getLastNetwork() == HardwareUtils.KEY_NETWORK_WIFI && network != HardwareUtils.KEY_NETWORK_WIFI){

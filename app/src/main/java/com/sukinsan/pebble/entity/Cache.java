@@ -21,7 +21,7 @@ public class Cache {
     private Weather weather = null;
 
     private boolean shutDownWiFi = false;
-    private boolean showReadMe = false;
+    private boolean showReadMe = true;
     private long lastCronJob = 0;
 
     public Cache() {}
