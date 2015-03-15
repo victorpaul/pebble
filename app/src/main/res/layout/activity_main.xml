@@ -25,10 +25,9 @@
         />
 
         <View
-            android:layout_marginTop="5dp"
-            android:background="#ccc"
-            android:layout_width="match_parent"
-            android:layout_height="3dp"/>
+            style="@style/horizontalSeparator"
+        />
+
         <ScrollView
             android:layout_weight="1"
             android:layout_width="match_parent"
@@ -46,6 +45,10 @@
                     android:layout_height="wrap_content"
                 />
 
+                <View
+                    style="@style/horizontalSeparator"
+                />
+
                 <com.rightutils.rightutils.widgets.TypefaceCheckbox
                     android:id="@+id/checkbox_shutdown_wifi"
                     android:text="@string/action_shut_down_wifi"
@@ -60,7 +63,6 @@
                     android:layout_height="wrap_content"
                 />
             </LinearLayout>
-
 
 
         </ScrollView>

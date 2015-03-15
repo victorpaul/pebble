@@ -32,5 +32,14 @@
         <item name="typeface">fonts/Free_Pixel.ttf</item>
     </style>
 
+    <style name="horizontalSeparator">
+        <item name="android:layout_marginLeft">20dp</item>
+        <item name="android:layout_marginRight">20dp</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:background">#ccc</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">3dp</item>
+    </style>
+
 
 </resources>
