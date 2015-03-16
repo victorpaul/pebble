@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class Cache {
     public interface CallBack{
-        public void run(Cache cache);
+        public boolean run(Cache cache);
     }
 
     private List<Integer> lastBatteryInfo = new ArrayList<Integer>();

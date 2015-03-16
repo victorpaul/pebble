@@ -55,10 +55,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
             public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
                 SystemUtils.getCache(MainActivity.this,new Cache.CallBack() {
                     @Override
-                    public void run(Cache cache) {
+                    public boolean run(Cache cache) {
                         cache.setShutDownWiFi(isChecked);
+                        return true;
                     }
-                },true);
+                });
             }
         });
 
@@ -69,25 +70,27 @@ public class MainActivity extends Activity implements View.OnClickListener {
             public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
                 SystemUtils.getCache(MainActivity.this,new Cache.CallBack() {
                     @Override
-                    public void run(Cache cache) {
+                    public boolean run(Cache cache) {
                         cache.setShowReadMe(isChecked);
+                        return true;
                     }
-                },true);
+                });
             }
         });
 
         // set up default values for checkboxes
         SystemUtils.getCache(MainActivity.this,new Cache.CallBack() {
             @Override
-            public void run(Cache cache) {
+            public boolean run(Cache cache) {
                 checkBoxShutDownWiFi.setChecked(cache.isShutDownWiFi());
                 checkShowReadme.setChecked(cache.isShowReadMe());
 
                 if(cache.isShowReadMe() == false){
                     findViewById(R.id.txt_read_me).setVisibility(View.GONE);
                 }
+                return false;
             }
-        },false);
+        });
 
         setPebbleStatus(PebbleKit.isWatchConnected(getApplicationContext()));
     }

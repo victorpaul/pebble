@@ -31,7 +31,7 @@ public class SystemUtils {
         }
     }
 
-    public static synchronized void getCache(Context context,Cache.CallBack callback,boolean saveCache) {
+    public static synchronized void getCache(Context context,Cache.CallBack callback) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (!sharedPreferences.getString(Cache.class.getName(), "").isEmpty()) {
             try {
@@ -45,11 +45,9 @@ public class SystemUtils {
         }
 
         if(callback != null){
-            callback.run(CACHE);
-        }
-
-        if(saveCache) {
-            saveCache(context);
+            if(callback.run(CACHE)){
+                saveCache(context);
+            }
         }
     }
 }

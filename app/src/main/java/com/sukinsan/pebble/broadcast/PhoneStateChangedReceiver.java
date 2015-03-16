@@ -28,12 +28,21 @@ public class PhoneStateChangedReceiver extends BroadcastReceiver {
 
         SystemUtils.getCache(context,new Cache.CallBack() {
             @Override
-            public void run(Cache cache) {
+            public boolean run(Cache cache) {
 
-                if(cache.getLastCronJob() + HardwareUtils.UPDATE_INTERVAL_MINIMAL > System.currentTimeMillis()){
-                    return;
+                if(cache.getLastCronJob() + HardwareUtils.UPDATE_INTERVAL_MINIMAL > System.currentTimeMillis()){ // prevent sending data to watch too frequently
+
+                    /**
+                     * check if user didn't change time on the phone manually,
+                     * if user set time next friday, and set it back - there is a possibility that cache.getLastCronJob() would return time in future
+                     * so  previous condition would bew true until next friday
+                     */
+                    if(cache.getLastCronJob() > System.currentTimeMillis()){
+                        cache.setLastCronJob(System.currentTimeMillis());
+                        return true;
+                    }
+                    return false;
                 }
-
 
                 if(intent.getAction() != null && intent.getAction().equals("android.net.conn.CONNECTIVITY_CHANGE")){ // NETWORK CHANGED
                     int network = HardwareUtils.getNetworkStatus(context);
@@ -54,9 +63,10 @@ public class PhoneStateChangedReceiver extends BroadcastReceiver {
                 HardwareUtils.sendUpdateToPebble(cache,context.getApplicationContext());
 
                 cache.setLastCronJob(System.currentTimeMillis());
+                return true;
 
             }
-        },true);
+        });
 
     }
 }

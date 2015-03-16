@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.Environment;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.getpebble.android.kit.PebbleKit;
@@ -95,7 +96,9 @@ public class HardwareUtils {
     }
 
     public static void sendUpdateToPebble(Cache cache,Context context){
+        Log.i(TAG, "sendUpdateToPebble");
         if(!PebbleKit.isWatchConnected(context)){
+            Log.i(TAG, "!PebbleKit.isWatchConnected(context)");
             return;
         }
         PebbleDictionary data = new PebbleDictionary();
@@ -110,6 +113,7 @@ public class HardwareUtils {
         }
 
         PebbleKit.sendDataToPebble(context, PEBBLE_APP_UUID, data);
+        Log.i(TAG, "PebbleKit.sendDataToPebble");
     }
 
     public static void runCron(Context context){

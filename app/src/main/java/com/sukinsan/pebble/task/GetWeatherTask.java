@@ -67,10 +67,11 @@ public class GetWeatherTask extends AsyncTask<Void,Void,Void> {
 
                 SystemUtils.getCache(context,new Cache.CallBack() {
                     @Override
-                    public void run(Cache cache){
+                    public boolean run(Cache cache){
                         cache.setWeather(weather);
+                        return true;
                     }
-                },true);
+                });
 
             }
 
