@@ -57,8 +57,13 @@ public class HardwareUtils {
 
     public final static int KEY_WEATHER = 300;
 
+    private Context context;
 
-    public static List<Integer> getBatteryInfo(Context context){
+    public HardwareUtils(Context context) {
+        this.context = context;
+    }
+
+    public List<Integer> getBatteryInfo(){
         List<Integer> response = new ArrayList<Integer>();
         Intent batteryStatus = context.registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 
@@ -81,7 +86,7 @@ public class HardwareUtils {
         return response;
     }
 
-    public static int getNetworkStatus(Context context){
+    public int getNetworkStatus(){
         ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         if(activeNetwork != null && activeNetwork.isConnectedOrConnecting()){
@@ -95,7 +100,7 @@ public class HardwareUtils {
         }
     }
 
-    public static void sendUpdateToPebble(Cache cache,Context context){
+    public void sendUpdateToPebble(Cache cache){
         Log.i(TAG, "sendUpdateToPebble");
         if(!PebbleKit.isWatchConnected(context)){
             Log.i(TAG, "!PebbleKit.isWatchConnected(context)");
@@ -116,7 +121,7 @@ public class HardwareUtils {
         Log.i(TAG, "PebbleKit.sendDataToPebble");
     }
 
-    public static void runCron(Context context){
+    public void runCron(){
         AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, PhoneStateChangedReceiver.class);
         PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
@@ -125,7 +130,7 @@ public class HardwareUtils {
         alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),UPDATE_INTERVAL,alarmIntent);
     }
 
-    public static void sendAppToWatch(Context context) {
+    public void sendAppToWatch() {
         if(!PebbleKit.isWatchConnected(context)){
             return;
         }
@@ -154,7 +159,7 @@ public class HardwareUtils {
         }
     }
 
-    public static void setWifiState(Context context,boolean state){
+    public void setWifiState(boolean state){
         WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         wifiManager.setWifiEnabled(state);
     }

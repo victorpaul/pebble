@@ -15,10 +15,13 @@ import com.sukinsan.pebble.utils.SystemUtils;
  * Created by victorpaul on 23/1/15.
  */
 public class PhoneStateChangedReceiver extends BroadcastReceiver {
-    public final static String TAG = PhoneStateChangedReceiver.class.getSimpleName();
+    private final static String TAG = PhoneStateChangedReceiver.class.getSimpleName();
+    private HardwareUtils hardwareUtils;
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
+
+        hardwareUtils = new HardwareUtils(context.getApplicationContext());
 
         if(intent.getAction() != null){
             Log.i(TAG,intent.getAction());
@@ -45,22 +48,22 @@ public class PhoneStateChangedReceiver extends BroadcastReceiver {
                 }
 
                 if(intent.getAction() != null && intent.getAction().equals("android.net.conn.CONNECTIVITY_CHANGE")){ // NETWORK CHANGED
-                    int network = HardwareUtils.getNetworkStatus(context);
+                    int network = hardwareUtils.getNetworkStatus();
 
                     if(cache.isShutDownWiFi() && cache.getLastNetwork() == HardwareUtils.KEY_NETWORK_WIFI && network != HardwareUtils.KEY_NETWORK_WIFI){
-                        HardwareUtils.setWifiState(context,false);
+                        hardwareUtils.setWifiState(false);
                     }
 
                     cache.setLastNetwork(network);
                 }else{ // BATTERY LEVEL/STATE, WEATHER
-                    cache.setLastBatteryInfo(HardwareUtils.getBatteryInfo(context));
+                    cache.setLastBatteryInfo(hardwareUtils.getBatteryInfo());
 
                     if(cache.getWeather() == null || cache.getWeather().getLastUpdate() + HardwareUtils.UPDATE_WEATHER_INTERVAL < System.currentTimeMillis()) {
                         new GetWeatherTask(context).execute();
                     }
                 }
 
-                HardwareUtils.sendUpdateToPebble(cache,context.getApplicationContext());
+                hardwareUtils.sendUpdateToPebble(cache);
 
                 cache.setLastCronJob(System.currentTimeMillis());
                 return true;

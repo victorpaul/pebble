@@ -32,6 +32,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private View buttonInstall;
     private CheckBox checkBoxShutDownWiFi;
     private CheckBox checkShowReadme;
+    private HardwareUtils hardwareUtils;
 
 
     @Override
@@ -39,7 +40,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        HardwareUtils.runCron(getApplicationContext());
+        hardwareUtils = new HardwareUtils(getApplicationContext());
+        hardwareUtils.runCron();
 
         // pebble connecting status
         pebbleStatus = (TextView)findViewById(R.id.txt_pebble_status);
@@ -156,7 +158,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_install_pebble_app:
-                HardwareUtils.sendAppToWatch(this);
+                hardwareUtils.sendAppToWatch();
                 break;
         }
     }
