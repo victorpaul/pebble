@@ -40,7 +40,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        hardwareUtils = new HardwareUtils(getApplicationContext());
+        hardwareUtils = new HardwareUtils(this);
         hardwareUtils.runCron();
 
         // pebble connecting status

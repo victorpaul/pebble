@@ -155,6 +155,7 @@ public class HardwareUtils {
             intent.setDataAndType(Uri.fromFile(file), "application/octet-stream");
             context.startActivity(intent);
         } catch (Exception e) {
+            e.printStackTrace();
             Toast.makeText(context, "Oops.....", Toast.LENGTH_LONG).show();
         }
     }
