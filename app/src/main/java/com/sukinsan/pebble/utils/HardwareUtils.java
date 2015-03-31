@@ -18,6 +18,7 @@ import com.getpebble.android.kit.PebbleKit;
 import com.getpebble.android.kit.util.PebbleDictionary;
 import com.sukinsan.pebble.broadcast.PhoneStateChangedReceiver;
 import com.sukinsan.pebble.entity.Cache;
+import com.sukinsan.pebble.entity.HardwareLog;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,6 +27,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import anDB.DBHandler;
 
 /**
  * Created by viktor_2 on 1/9/15.
@@ -67,11 +70,6 @@ public class HardwareUtils {
         List<Integer> response = new ArrayList<Integer>();
         Intent batteryStatus = context.registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 
-        int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-        if(level <= BATTERY_LEVEL_MAX || level >= BATTERY_LEVEL_MIN){
-            response.add(level);
-        }
-
         int chargePlug = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED,-1);
         if(chargePlug == BatteryManager.BATTERY_PLUGGED_USB){
             response.add(BATTERY_CHARGING_USB);
@@ -81,6 +79,11 @@ public class HardwareUtils {
             response.add(BATTERY_CHARGING_WIRELESS);
         }else{
             response.add(BATTERY_CHARGING_NONE);
+        }
+
+        int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+        if(level <= BATTERY_LEVEL_MAX || level >= BATTERY_LEVEL_MIN){
+            response.add(level);
         }
 
         return response;
@@ -102,16 +105,22 @@ public class HardwareUtils {
 
     public void sendUpdateToPebble(Cache cache){
         Log.i(TAG, "sendUpdateToPebble");
+
         if(!PebbleKit.isWatchConnected(context)){
             Log.i(TAG, "!PebbleKit.isWatchConnected(context)");
             return;
         }
+
         PebbleDictionary data = new PebbleDictionary();
 
         data.addUint8(cache.getLastNetwork(), (byte) 0);
+        String battery = "";
         for (int i = 0; i < cache.getLastBatteryInfo().size(); i++) {
             data.addUint8(cache.getLastBatteryInfo().get(i), (byte) 0);
+            battery += generateLog(cache.getLastBatteryInfo().get(i)) + " ";
         }
+        DBHandler dbHandler = new DBHandler(context);
+        dbHandler.insert(new HardwareLog(battery));
 
         if(cache.getWeather() != null){
             data.addString(KEY_WEATHER,cache.getWeather().getDescription());
@@ -119,6 +128,7 @@ public class HardwareUtils {
 
         PebbleKit.sendDataToPebble(context, PEBBLE_APP_UUID, data);
         Log.i(TAG, "PebbleKit.sendDataToPebble");
+
     }
 
     public void runCron(){
@@ -163,6 +173,30 @@ public class HardwareUtils {
     public void setWifiState(boolean state){
         WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         wifiManager.setWifiEnabled(state);
+    }
+
+    public String generateLog(int status){
+        switch(status){
+            case KEY_NETWORK_WIFI:
+                return "Network changed to wifi";
+            case KEY_NETWORK_MOBILE:
+                return "Network changed to mobile";
+            case KEY_NETWORK_OFF:
+                return "Network disabled";
+            case BATTERY_CHARGING_USB:
+                return "Usb charging";
+            case BATTERY_CHARGING_SET:
+                return "Charging";
+            case BATTERY_CHARGING_WIRELESS:
+                return "Wireless charging";
+            case BATTERY_CHARGING_NONE:
+                return "Not charging";
+            default:
+                if(status >= BATTERY_LEVEL_MIN && status <=BATTERY_LEVEL_MAX){
+                    return status +"%";
+                }
+        }
+        return "Unhandled event " + status;
     }
 
 }

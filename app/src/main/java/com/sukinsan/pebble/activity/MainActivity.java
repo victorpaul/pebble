@@ -1,25 +1,38 @@
 package com.sukinsan.pebble.activity;
 
-import android.app.Activity;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+
 import android.widget.TextView;
 
 import com.getpebble.android.kit.PebbleKit;
 import com.getpebble.android.kit.util.PebbleDictionary;
 import com.sukinsan.pebble.R;
 import com.sukinsan.pebble.entity.Cache;
+
 import com.sukinsan.pebble.utils.HardwareUtils;
 import com.sukinsan.pebble.utils.SystemUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 
-public class MainActivity extends Activity implements View.OnClickListener {
+import anDB.DBHandler;
+
+
+public class MainActivity extends ActionBarActivity implements View.OnClickListener {
     public final static String TAG = MainActivity.class.getSimpleName();
 
     private boolean isPebbleConnected = false;
@@ -95,6 +108,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         });
 
         setPebbleStatus(PebbleKit.isWatchConnected(getApplicationContext()));
+
+
     }
 
     public void registerPebbleBroadcasts(){
@@ -174,5 +189,42 @@ public class MainActivity extends Activity implements View.OnClickListener {
     protected void onPause() {
         unRegisterPebbleBroadcasts();
         super.onPause();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        MenuItem menuItem = menu.findItem(R.id.action_share);
+        ShareActionProvider mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+        if (mShareActionProvider != null ) {
+            mShareActionProvider.setShareIntent(createShareForecastIntent("Check out cool android/pebble app " + getResources().getString(R.string.app_name)));
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_log) {
+            startActivity(new Intent(this,LogActivity.class));
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private Intent createShareForecastIntent(String message) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT,message);
+        return shareIntent;
     }
 }

@@ -1,6 +1,8 @@
 package com.sukinsan.pebble.task;
 
 import android.content.Context;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -32,8 +34,18 @@ public class GetWeatherTask extends AsyncTask<Void,Void,Void> {
     @Override
     protected Void doInBackground(Void... params) {
 
+        LocationManager lm = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+        if(location == null) {
+            Log.i(TAG,"location == null");
+            return null;
+        }
+
         try {
-            String url = String.format("http://api.openweathermap.org/data/2.5/forecast/daily?cnt=1&units=metrics&lat=49.4402308&lon=32.0667807&units=metric");
+            String url = String.format(SystemUtils.WEATHER_ENDPOINT,location.getLatitude(),location.getLongitude());
+
+            Log.i(TAG,"GET: " + url);
 
             HttpUriRequest request = new HttpGet(url);
             HttpClient httpclient = new DefaultHttpClient();

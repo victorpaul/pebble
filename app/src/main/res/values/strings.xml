@@ -11,5 +11,8 @@
         \nHere are some tricky things that would help you to save your battery life a little bit
     </string>
     <string name="action_shut_down_wifi">if wifi lost signal - shut down it!</string>
+    <string name="title_activity_log">LogActivity</string>
+
+    <string name="hello_world">Hello world!</string>
 
 </resources>

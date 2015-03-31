@@ -16,6 +16,8 @@ import org.codehaus.jackson.map.ObjectMapper;
 public class SystemUtils {
     public static final String TAG = SystemUtils.class.getSimpleName();
 
+    public static final String WEATHER_ENDPOINT = "http://api.openweathermap.org/data/2.5/forecast/daily?cnt=1&units=metrics&lat=%f&lon=%f&units=metric";
+
     public static final ObjectMapper MAPPER = new ObjectMapper().configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     public static Cache CACHE;
 

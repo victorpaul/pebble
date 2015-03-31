@@ -5,7 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.sukinsan.pebble.entity.HardwareLog;
 import com.sukinsan.pebble.utils.HardwareUtils;
+
+import anDB.DBHandler;
 
 /**
  * Created by victorpaul on 23/1/15.
@@ -17,6 +20,9 @@ public class BootReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if(intent.getAction().equals("android.intent.action.BOOT_COMPLETED")){
             new HardwareUtils(context).runCron();
+
+            DBHandler dbHandler = new DBHandler(context);
+            dbHandler.insert(new HardwareLog("Phone is ON"));
         }
 
     }

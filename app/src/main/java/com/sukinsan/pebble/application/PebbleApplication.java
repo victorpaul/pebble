@@ -5,8 +5,12 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 
+import com.sukinsan.pebble.entity.HardwareLog;
+
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
+
+import anDB.DBHandler;
 
 /**
  * Created by victorpaul on 14/1/15.
@@ -20,5 +24,8 @@ public class PebbleApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        DBHandler dbHandler = new DBHandler(getApplicationContext());
+        dbHandler.create(HardwareLog.class);
+
     }
 }
