@@ -1,16 +1,17 @@
 package com.sukinsan.pebble.entity;
 
+import com.sukinsan.anDB.anDB.abstracts.BaseEntity;
+import com.sukinsan.anDB.anDB.annotations.Column;
+import com.sukinsan.anDB.anDB.annotations.Table;
+
 import java.util.Date;
 
-import anDB.abstracts.BaseTable;
-import anDB.annotations.Column;
-import anDB.annotations.Table;
 
 /**
  * Created by victor on 30.03.15.
  */
 @Table(name = "hardwareLog")
-public class HardwareLog extends BaseTable{
+public class HardwareLog extends BaseEntity{
     @Column(name = "description",type = "TEXT")
     private String description;
 
@@ -23,6 +24,11 @@ public class HardwareLog extends BaseTable{
     public HardwareLog(String description) {
         this.description = description;
         this.date = System.currentTimeMillis()+"";
+    }
+
+    public HardwareLog(String description,String date) {
+        this.description = description;
+        this.date = date;
     }
 
     public String getDescription() {
@@ -41,16 +47,16 @@ public class HardwareLog extends BaseTable{
     }
 
     @Override
-    public void beforeDelete(BaseTable baseTable) {
-
-    }
-
-    @Override
     public String toString() {
         return "HardwareLog{" +
-                "id='" + id + '\'' +
+
                 "description='" + description + '\'' +
                 ", date=" + getDate() +
                 '}';
+    }
+
+    @Override
+    public void beforeDelete(BaseEntity baseEntity) {
+
     }
 }

@@ -46,7 +46,8 @@
         <activity
             android:name=".activity.LogActivity"
             android:label="@string/title_activity_log"
-            android:parentActivityName=".activity.MainActivity" >
+            android:parentActivityName=".activity.MainActivity"
+            android:screenOrientation="sensor">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.sukinsan.pebble.activity.MainActivity" />

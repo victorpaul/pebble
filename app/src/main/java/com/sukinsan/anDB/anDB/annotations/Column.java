@@ -1,4 +1,4 @@
-package anDB.annotations;
+package com.sukinsan.anDB.anDB.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

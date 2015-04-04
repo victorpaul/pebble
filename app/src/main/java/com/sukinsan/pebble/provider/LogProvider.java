@@ -8,9 +8,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
+import com.sukinsan.anDB.anDB.DBHandler;
+
 import java.util.HashMap;
 
-import anDB.DBHandler;
 
 /**
  * Created by victor on 31.03.15.

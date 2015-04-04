@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.getpebble.android.kit.PebbleKit;
 import com.getpebble.android.kit.util.PebbleDictionary;
+import com.sukinsan.pebble.application.PebbleApplication;
 import com.sukinsan.pebble.broadcast.PhoneStateChangedReceiver;
 import com.sukinsan.pebble.entity.Cache;
 import com.sukinsan.pebble.entity.HardwareLog;
@@ -27,8 +28,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import anDB.DBHandler;
 
 /**
  * Created by viktor_2 on 1/9/15.
@@ -119,8 +118,7 @@ public class HardwareUtils {
             data.addUint8(cache.getLastBatteryInfo().get(i), (byte) 0);
             battery += generateLog(cache.getLastBatteryInfo().get(i)) + " ";
         }
-        DBHandler dbHandler = new DBHandler(context);
-        dbHandler.insert(new HardwareLog(battery));
+        PebbleApplication.dbHandler.getQM().insert(new HardwareLog(battery));
 
         if(cache.getWeather() != null){
             data.addString(KEY_WEATHER,cache.getWeather().getDescription());

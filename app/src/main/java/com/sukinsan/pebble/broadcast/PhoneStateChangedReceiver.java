@@ -6,13 +6,12 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.getpebble.android.kit.PebbleKit;
+import com.sukinsan.pebble.application.PebbleApplication;
 import com.sukinsan.pebble.entity.Cache;
 import com.sukinsan.pebble.entity.HardwareLog;
 import com.sukinsan.pebble.task.GetWeatherTask;
 import com.sukinsan.pebble.utils.HardwareUtils;
 import com.sukinsan.pebble.utils.SystemUtils;
-
-import anDB.DBHandler;
 
 /**
  * Created by victorpaul on 23/1/15.
@@ -20,13 +19,11 @@ import anDB.DBHandler;
 public class PhoneStateChangedReceiver extends BroadcastReceiver {
     private final static String TAG = PhoneStateChangedReceiver.class.getSimpleName();
     private HardwareUtils hardwareUtils;
-    private DBHandler dbHandler;
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
 
         hardwareUtils = new HardwareUtils(context.getApplicationContext());
-        dbHandler = new DBHandler(context);
 
         if(intent.getAction() != null){
             Log.i(TAG,intent.getAction());
@@ -59,7 +56,7 @@ public class PhoneStateChangedReceiver extends BroadcastReceiver {
                         hardwareUtils.setWifiState(false);
                     }
 
-                    dbHandler.insert(new HardwareLog(hardwareUtils.generateLog(network)));
+                    PebbleApplication.dbHandler.getQM().insert(new HardwareLog(hardwareUtils.generateLog(network)));
                     cache.setLastNetwork(network);
                 }else{ // BATTERY LEVEL/STATE, WEATHER
                     cache.setLastBatteryInfo(hardwareUtils.getBatteryInfo());
@@ -68,7 +65,7 @@ public class PhoneStateChangedReceiver extends BroadcastReceiver {
                     for(Integer status : cache.getLastBatteryInfo()){
                         battery += hardwareUtils.generateLog(status) + " ";
                     }
-                    dbHandler.insert(new HardwareLog(battery));
+                    PebbleApplication.dbHandler.getQM().insert(new HardwareLog(battery));
 
                     if(cache.getWeather() == null || cache.getWeather().getLastUpdate() + HardwareUtils.UPDATE_WEATHER_INTERVAL < System.currentTimeMillis()) {
                         new GetWeatherTask(context).execute();

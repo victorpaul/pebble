@@ -26,12 +26,6 @@ import com.sukinsan.pebble.entity.Cache;
 import com.sukinsan.pebble.utils.HardwareUtils;
 import com.sukinsan.pebble.utils.SystemUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import anDB.DBHandler;
-
-
 public class MainActivity extends ActionBarActivity implements View.OnClickListener {
     public final static String TAG = MainActivity.class.getSimpleName();
 
