@@ -48,10 +48,13 @@ public class LogActivity extends ActionBarActivity implements LoaderManager.Load
         List<HardwareLog> hwls = new ArrayList<HardwareLog>();
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            hwls.add(new HardwareLog(cursor.getString(cursor.getColumnIndex("description")),cursor.getString(cursor.getColumnIndex("date"))));
+            try {
+                hwls.add(PebbleApplication.dbHandler.getQM().getSchemaManager().createEntityFromCursor(cursor,HardwareLog.class));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             cursor.moveToNext();
         }
-        //PebbleApplication.dbHandler.getQM().g
 
         ListView logsView = (ListView)findViewById(R.id.listview_logs);
         logsView.setAdapter(new LogAdapter(this,hwls));
