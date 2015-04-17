@@ -3,10 +3,7 @@ package com.sukinsan.pebble.broadcast;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
-import com.sukinsan.pebble.application.PebbleApplication;
-import com.sukinsan.pebble.entity.HardwareLog;
 import com.sukinsan.pebble.utils.HardwareUtils;
 
 /**
@@ -19,8 +16,6 @@ public class BootReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if(intent.getAction().equals("android.intent.action.BOOT_COMPLETED")){
             new HardwareUtils(context).runCron();
-
-            PebbleApplication.dbHandler.getQM().insert(new HardwareLog("Phone is ON"));
         }
 
     }

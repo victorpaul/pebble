@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:name=".application.PebbleApplication"
@@ -42,24 +41,6 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
-        <activity
-            android:name=".activity.LogActivity"
-            android:label="@string/title_activity_log"
-            android:parentActivityName=".activity.MainActivity"
-            android:screenOrientation="sensor">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.sukinsan.pebble.activity.MainActivity" />
-        </activity>
-
-        <provider
-            android:name=".provider.LogProvider"
-            android:authorities="com.sukinsan.log.provider"
-            android:exported="true"
-            android:multiprocess="true"
-        />
-
 
     </application>
 

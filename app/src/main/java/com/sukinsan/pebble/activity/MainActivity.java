@@ -1,6 +1,5 @@
 package com.sukinsan.pebble.activity;
 
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -28,8 +27,6 @@ import com.sukinsan.pebble.utils.SystemUtils;
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener {
     public final static String TAG = MainActivity.class.getSimpleName();
-
-    private boolean isPebbleConnected = false;
 
     private BroadcastReceiver pebbleConnectedReceiver = null;
     private BroadcastReceiver pebbleDataReceiver = null;
@@ -153,11 +150,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     public void setPebbleStatus(boolean isConnected){
         if(isConnected){
-            isPebbleConnected = true;
             pebbleStatus.setText(getResources().getString(R.string.txt_pebble_is_connected));
             buttonInstall.setVisibility(View.VISIBLE);
         }else{
-            isPebbleConnected = false;
             pebbleStatus.setText(getResources().getString(R.string.txt_pebble_is_not_connected));
             buttonInstall.setVisibility(View.GONE);
         }
@@ -207,9 +202,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_log) {
-            startActivity(new Intent(this,LogActivity.class));
-        }
 
         return super.onOptionsItemSelected(item);
     }

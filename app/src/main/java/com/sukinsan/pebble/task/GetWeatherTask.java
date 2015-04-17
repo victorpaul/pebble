@@ -77,13 +77,14 @@ public class GetWeatherTask extends AsyncTask<Void,Void,Void> {
                 weather.setIco(weat.getString("icon"));
                 weather.setLastUpdate(System.currentTimeMillis());
 
+                /*
                 SystemUtils.getCache(context,new Cache.CallBack() {
                     @Override
                     public boolean run(Cache cache){
-                        cache.setWeather(weather);
-                        return true;
+                    cache.setWeather(weather);
+                    return true;
                     }
-                });
+                });//*/
 
             }
 

@@ -19,7 +19,6 @@ import com.getpebble.android.kit.util.PebbleDictionary;
 import com.sukinsan.pebble.application.PebbleApplication;
 import com.sukinsan.pebble.broadcast.PhoneStateChangedReceiver;
 import com.sukinsan.pebble.entity.Cache;
-import com.sukinsan.pebble.entity.HardwareLog;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -41,9 +40,6 @@ public class HardwareUtils {
     public final static double ON_BOARD_PEBBLE_APP_VERSION = 1.0;
     public final static String ON_BOARD_PEBBLE_APP_FILENAME = "Friendly_Watch.pbw";
 
-    public final static int UPDATE_WEATHER_INTERVAL = 1000 * 60 * 60; // every hour
-
-    public final static int UPDATE_INTERVAL_MINIMAL = 1000 * 5;
     public final static int UPDATE_INTERVAL = 1000 * 60 * 2;
 
     public final static int BATTERY_LEVEL_MIN = 1;
@@ -56,8 +52,6 @@ public class HardwareUtils {
     public final static int KEY_NETWORK_WIFI = 201;
     public final static int KEY_NETWORK_MOBILE = 202;
     public final static int KEY_NETWORK_OFF = 204;
-
-    public final static int KEY_WEATHER = 300;
 
     private Context context;
 
@@ -117,11 +111,6 @@ public class HardwareUtils {
         for (int i = 0; i < cache.getLastBatteryInfo().size(); i++) {
             data.addUint8(cache.getLastBatteryInfo().get(i), (byte) 0);
             battery += generateLog(cache.getLastBatteryInfo().get(i)) + " ";
-        }
-        PebbleApplication.dbHandler.getQM().insert(new HardwareLog(battery));
-
-        if(cache.getWeather() != null){
-            data.addString(KEY_WEATHER,cache.getWeather().getDescription());
         }
 
         PebbleKit.sendDataToPebble(context, PEBBLE_APP_UUID, data);

@@ -2,10 +2,7 @@ package com.sukinsan.pebble.entity;
 
 import com.sukinsan.pebble.utils.HardwareUtils;
 
-import org.json.JSONException;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -18,7 +15,6 @@ public class Cache {
 
     private List<Integer> lastBatteryInfo = new ArrayList<Integer>();
     private int lastNetwork = HardwareUtils.KEY_NETWORK_OFF;
-    private Weather weather = null;
 
     private boolean shutDownWiFi = false;
     private boolean showReadMe = true;
@@ -40,14 +36,6 @@ public class Cache {
 
     public void setLastNetwork(int lastNetwork) {
         this.lastNetwork = lastNetwork;
-    }
-
-    public Weather getWeather() {
-        return weather;
-    }
-
-    public void setWeather(Weather weather) {
-        this.weather = weather;
     }
 
     public boolean isShutDownWiFi() {
@@ -79,7 +67,6 @@ public class Cache {
         return "Cache{" +
                 "lastBatteryInfo=" + lastBatteryInfo +
                 ", lastNetwork=" + lastNetwork +
-                ", weather=" + weather +
                 ", shutDownWiFi=" + shutDownWiFi +
                 ", showReadMe=" + showReadMe +
                 ", lastCronJob=" + lastCronJob +
