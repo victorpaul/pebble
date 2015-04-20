@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Товариський Пебл</string>
+    <string name="app_name">Дружній Пебл</string>
     <string name="txt_pebble_is_not_connected">Годинник не підключений</string>
     <string name="txt_pebble_is_connected">Годинник підключений</string>
     <string name="action_install_app">Встановити або оновити додаток на годиннику</string>
     <string name="txt_introduction">
-        читати:
+        Читати:
         \nПривіт друже, я вдячний що ти встановив цей додаток на свій смартмафон.
     </string>
     <string name="action_shut_down_wifi">Вимкнути вайфай якщо сигнал було втрачено</string>
+    <string name="txt_checkbox_show_readme">Показати привітання при наступному запуску додатка</string>
+    <string name="txt_share_invitation">Маєш смартгодинник пеббл? Спробуй цей крутий додаток на андроїді</string>
 </resources>

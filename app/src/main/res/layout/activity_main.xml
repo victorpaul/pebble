@@ -58,7 +58,7 @@
 
                 <com.rightutils.rightutils.widgets.TypefaceCheckbox
                     android:id="@+id/checkbox_show_show_readme"
-                    android:text="show read me on the next launch"
+                    android:text="@string/txt_checkbox_show_readme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                 />

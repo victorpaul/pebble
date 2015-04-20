@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">FrndlPbbl</string>
+    <string name="app_name">Friendly pebble</string>
     <string name="txt_pebble_is_not_connected">Pebble is not connected</string>
     <string name="txt_pebble_is_connected">Pebble is connected</string>
     <string name="action_install_app">Install/Reinstall pebble app</string>
@@ -9,4 +9,6 @@
         \nHere are some tricky things that would help you to save your battery life a little bit
     </string>
     <string name="action_shut_down_wifi">if wifi signal has been lost - shut down wifi!</string>
+    <string name="txt_checkbox_show_readme">Show read me on the next launch</string>
+    <string name="txt_share_invitation">Have pebble watch? Check out this cool android app for it</string>
 </resources>

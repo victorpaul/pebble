@@ -185,10 +185,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        MenuItem menuItem = menu.findItem(R.id.action_share);
+        MenuItem menuItem = menu.findItem(R.id.menu_item_share);
         ShareActionProvider mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
         if (mShareActionProvider != null ) {
-            mShareActionProvider.setShareIntent(createShareForecastIntent("Check out cool android/pebble app " + getResources().getString(R.string.app_name)));
+            String shareMessage =  getResources().getString(R.string.txt_share_invitation) + " - '" + getResources().getString(R.string.app_name) + "'";
+            mShareActionProvider.setShareIntent(createShareForecastIntent(shareMessage));
         }
 
         return true;
