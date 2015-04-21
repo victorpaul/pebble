@@ -11,4 +11,7 @@
     <string name="action_shut_down_wifi">if wifi signal has been lost - shut down wifi!</string>
     <string name="txt_checkbox_show_readme">Show read me on the next launch</string>
     <string name="txt_share_invitation">Have pebble watch? Check out this cool android app for it</string>
+    <string name="txt_action_send_feedback">Submit feedback</string>
+    <string name="hint_message">Message</string>
+    <string name="action_cancel">Cancel</string>
 </resources>

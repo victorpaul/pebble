@@ -1,5 +1,6 @@
 package com.sukinsan.pebble.activity;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -197,12 +198,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        switch(id){
+            case R.id.menu_feedback:
+                showFeedBackDialog();
+                break;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -214,4 +216,14 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         shareIntent.putExtra(Intent.EXTRA_TEXT,message);
         return shareIntent;
     }
+
+    private void showFeedBackDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View feedbackView = getLayoutInflater().inflate(R.layout.dialog_feedback,null);
+        builder.setView(feedbackView);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
 }

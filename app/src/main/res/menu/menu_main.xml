@@ -7,4 +7,11 @@
         app:showAsAction="always"
         app:actionProviderClass="android.support.v7.widget.ShareActionProvider"
     />
+
+    <item
+        android:id="@+id/menu_feedback"
+        android:title="Feedback"
+        app:showAsAction="always"
+
+        />
 </menu>

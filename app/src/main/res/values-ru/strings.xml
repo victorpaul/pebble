@@ -5,7 +5,7 @@
     <string name="txt_pebble_is_connected">ЧасьІ подключеньІ</string>
     <string name="action_install_app">Встановити або оновити додаток на годиннику</string>
     <string name="txt_introduction">
-        Читати:
+        Рид ми:
         \nПривіт друже, я вдячний що ти встановив цей додаток на свій смартмафон.
     </string>
     <string name="action_shut_down_wifi">Вимкнути вайфай якщо сигнал було втрачено</string>
