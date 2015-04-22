@@ -14,4 +14,9 @@
     <string name="txt_action_send_feedback">Submit feedback</string>
     <string name="hint_message">Message</string>
     <string name="action_cancel">Cancel</string>
+    <string name="hint_your_name_optional">Your name (optional)</string>
+    <string name="toast_message_sent">Your message has been sent! Thank you</string>
+    <string name="toast_message_is_empty">Your message is empty</string>
+    <string name="manu_feedback">Feedback</string>
+    <string name="url_firebase_endpoint">https://intense-heat-6899.firebaseio.com</string>
 </resources>

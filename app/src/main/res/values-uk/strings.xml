@@ -11,4 +11,11 @@
     <string name="action_shut_down_wifi">Вимкнути вайфай якщо сигнал було втрачено</string>
     <string name="txt_checkbox_show_readme">Показати привітання при наступному запуску додатка</string>
     <string name="txt_share_invitation">Маєш смартгодинник пеббл? Спробуй цей крутий додаток на андроїді</string>
+    <string name="txt_action_send_feedback">Відправити відгук</string>
+    <string name="hint_message">Відгук</string>
+    <string name="action_cancel">Нє, передумав</string>
+    <string name="hint_your_name_optional">Ваше ім\'я (за бажанням)</string>
+    <string name="toast_message_sent">Ваш відгук відправлено, дякую!</string>
+    <string name="toast_message_is_empty">Будь ласка сформуйте ваш відгук</string>
+    <string name="manu_feedback">Відгук</string>
 </resources>

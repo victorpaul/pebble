@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import android.provider.Settings;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.ShareActionProvider;
@@ -13,18 +14,25 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.firebase.client.Firebase;
 import com.getpebble.android.kit.PebbleKit;
 import com.getpebble.android.kit.util.PebbleDictionary;
 import com.sukinsan.pebble.R;
 import com.sukinsan.pebble.entity.Cache;
 
+import com.sukinsan.pebble.entity.Feedback;
 import com.sukinsan.pebble.utils.HardwareUtils;
 import com.sukinsan.pebble.utils.SystemUtils;
+
+import java.util.Date;
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener {
     public final static String TAG = MainActivity.class.getSimpleName();
@@ -219,11 +227,53 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     private void showFeedBackDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View feedbackView = getLayoutInflater().inflate(R.layout.dialog_feedback,null);
+        final View feedbackView = getLayoutInflater().inflate(R.layout.dialog_feedback,null);
         builder.setView(feedbackView);
 
-        AlertDialog dialog = builder.create();
+        final AlertDialog dialog = builder.create();
         dialog.show();
-    }
 
+        Button sendFeedbAck = (Button)feedbackView.findViewById(R.id.btn_send_feedback);
+        sendFeedbAck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                EditText name = (EditText)feedbackView.findViewById(R.id.f_feedback_name);
+                EditText message = (EditText)feedbackView.findViewById(R.id.f_feedback);
+
+                if(message.getText().toString().isEmpty()){
+                    Toast.makeText(MainActivity.this,getString(R.string.toast_message_is_empty),Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                Feedback feedBack = new Feedback();
+                feedBack.setDeviceId(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+                feedBack.setName(name.getText().toString());
+                feedBack.setMessage(message.getText().toString());
+                feedBack.setCreated(new Date());
+                feedBack.setId(feedBack.getCreated().getTime() + "-" + feedBack.getDeviceId());
+
+                String firebaseEndPoint = getString(R.string.url_firebase_endpoint);
+
+                if(firebaseEndPoint.isEmpty()){
+                    Toast.makeText(MainActivity.this,"Feedback doesn't work yet",Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                try {
+                    Firebase.setAndroidContext(MainActivity.this);
+                    Firebase fireBase = new Firebase(firebaseEndPoint + "/android/pebble/feedback/" + feedBack.getId());
+                    fireBase.setValue(feedBack);
+                    fireBase.onDisconnect();
+                    fireBase = null;
+
+                    Toast.makeText(MainActivity.this,getString(R.string.toast_message_sent),Toast.LENGTH_LONG).show();
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+
+                dialog.dismiss();
+            }
+        });
+    }
 }

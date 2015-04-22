@@ -5,13 +5,19 @@
     android:layout_height="match_parent">
 
     <com.rightutils.rightutils.widgets.TypefaceEditText
-        android:textSize="25sp"
+        android:id="@+id/f_feedback_name"
+        android:hint="@string/hint_your_name_optional"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+    />
+
+    <com.rightutils.rightutils.widgets.TypefaceEditText
         android:id="@+id/f_feedback"
         android:hint="@string/hint_message"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:padding="5dp"
+        android:layout_weight="5"
         android:gravity="start"
         android:lines="4"
     />
