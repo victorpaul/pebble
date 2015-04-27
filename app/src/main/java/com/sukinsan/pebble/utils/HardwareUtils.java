@@ -154,6 +154,7 @@ public class HardwareUtils {
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(context, "Oops.....", Toast.LENGTH_LONG).show();
+            ((PebbleApplication)context.getApplicationContext()).eventCLickInstallUpdateFailed(e.getMessage());
         }
     }
 

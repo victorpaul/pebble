@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ДружественньІй пєбл</string>
-    <string name="txt_pebble_is_not_connected">ЧасьІ не подключеньІ</string>
-    <string name="txt_pebble_is_connected">ЧасьІ подключеньІ</string>
-    <string name="action_install_app">Встановити або оновити додаток на годиннику</string>
+    <string name="url_firebase_endpoint">https://intense-heat-6899.firebaseio.com</string>
+    <string name="app_name">Friendly Pebble</string>
+    <string name="txt_pebble_is_not_connected">Часы не подключены</string>
+    <string name="txt_pebble_is_connected">Часы подключены</string>
+    <string name="action_install_app">Установить или обновить приложение на часах</string>
     <string name="txt_introduction">
-        Рид ми:
-        \nПривіт друже, я вдячний що ти встановив цей додаток на свій смартмафон.
+        Читать:
+        \nПривет, спасибо что поставил это приложение. Благодаря нему ты можешь мониторить состояние батареи и сети своего телефона на часах.
     </string>
-    <string name="action_shut_down_wifi">Вимкнути вайфай якщо сигнал було втрачено</string>
-    <string name="txt_checkbox_show_readme">Показати привітання при наступному запуску додатка</string>
-    <string name="txt_share_invitation">Маєш смартгодинник пеббл? Спробуй цей крутий додаток на андроїді</string>
+    <string name="action_shut_down_wifi">Выключить вайфай если сигнал пропал</string>
+    <string name="txt_checkbox_show_readme">Показывать текстовое приветствие при следующем запуске этого приложения</string>
+    <string name="txt_share_invitation">У тебя есть часы от пеббл? Тогда обязательно попробуй это прилодение</string>
+    <string name="txt_action_send_feedback">Отправить отзыв</string>
+    <string name="hint_message">Отзыв</string>
+    <string name="action_cancel">Отбой</string>
+    <string name="hint_your_name_optional">Ваше имя (опционально)</string>
+    <string name="toast_message_sent">Ваш отзыв отправленно, спасибо!</string>
+    <string name="toast_message_is_empty">Пожалуйста сформируйте ваш отзыв</string>
+    <string name="manu_feedback">Отзыв</string>
 </resources>

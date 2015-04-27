@@ -26,6 +26,7 @@ import com.firebase.client.Firebase;
 import com.getpebble.android.kit.PebbleKit;
 import com.getpebble.android.kit.util.PebbleDictionary;
 import com.sukinsan.pebble.R;
+import com.sukinsan.pebble.application.PebbleApplication;
 import com.sukinsan.pebble.entity.Cache;
 
 import com.sukinsan.pebble.entity.Feedback;
@@ -46,12 +47,15 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private CheckBox checkBoxShutDownWiFi;
     private CheckBox checkShowReadme;
     private HardwareUtils hardwareUtils;
-
+    private PebbleApplication application;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        application = (PebbleApplication)getApplication();
+        application.eventOpenApp();
 
         hardwareUtils = new HardwareUtils(this);
         hardwareUtils.runCron();
@@ -68,17 +72,18 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         checkBoxShutDownWiFi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
-                SystemUtils.getCache(MainActivity.this,new Cache.CallBack() {
-                    @Override
-                    public boolean run(Cache cache) {
-                        cache.setShutDownWiFi(isChecked);
-                        return true;
-                    }
-                });
+            SystemUtils.getCache(MainActivity.this,new Cache.CallBack() {
+                @Override
+                public boolean run(Cache cache) {
+                cache.setShutDownWiFi(isChecked);
+                    application.eventSwitchWiFi(isChecked);
+                return true;
+                }
+            });
             }
         });
 
-        // set up showing of reead me
+        // set up showing of read me
         checkShowReadme = (CheckBox)findViewById(R.id.checkbox_show_show_readme);
         checkShowReadme.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -86,8 +91,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 SystemUtils.getCache(MainActivity.this,new Cache.CallBack() {
                     @Override
                     public boolean run(Cache cache) {
-                        cache.setShowReadMe(isChecked);
-                        return true;
+                    cache.setShowReadMe(isChecked);
+                    application.eventSwitchReadMe(isChecked);
+                    return true;
                     }
                 });
             }
@@ -108,8 +114,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         });
 
         setPebbleStatus(PebbleKit.isWatchConnected(getApplicationContext()));
-
-
     }
 
     public void registerPebbleBroadcasts(){
@@ -171,6 +175,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_install_pebble_app:
+                application.eventCLickInstallUpdate();
                 hardwareUtils.sendAppToWatch();
                 break;
         }
@@ -195,10 +200,18 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
         MenuItem menuItem = menu.findItem(R.id.menu_item_share);
+
         ShareActionProvider mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
         if (mShareActionProvider != null ) {
             String shareMessage =  getResources().getString(R.string.txt_share_invitation) + " - '" + getResources().getString(R.string.app_name) + "'";
             mShareActionProvider.setShareIntent(createShareForecastIntent(shareMessage));
+            mShareActionProvider.setOnShareTargetSelectedListener(new ShareActionProvider.OnShareTargetSelectedListener() {
+                @Override
+                public boolean onShareTargetSelected(ShareActionProvider shareActionProvider, Intent intent) {
+                    application.eventCLickShare();
+                    return false;
+                }
+            });
         }
 
         return true;
@@ -226,6 +239,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     }
 
     private void showFeedBackDialog(){
+        application.eventCLickMenuFeedback();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final View feedbackView = getLayoutInflater().inflate(R.layout.dialog_feedback,null);
         builder.setView(feedbackView);
@@ -237,42 +251,41 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         sendFeedbAck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+            EditText name = (EditText)feedbackView.findViewById(R.id.f_feedback_name);
+            EditText message = (EditText)feedbackView.findViewById(R.id.f_feedback);
+            if(message.getText().toString().isEmpty()){
+                Toast.makeText(MainActivity.this,getString(R.string.toast_message_is_empty),Toast.LENGTH_LONG).show();
+                return;
+            }
 
-                EditText name = (EditText)feedbackView.findViewById(R.id.f_feedback_name);
-                EditText message = (EditText)feedbackView.findViewById(R.id.f_feedback);
+            Feedback feedBack = new Feedback();
+            feedBack.setDeviceId(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+            feedBack.setName(name.getText().toString());
+            feedBack.setMessage(message.getText().toString());
+            feedBack.setCreated(new Date());
+            feedBack.setId(feedBack.getCreated().getTime() + "-" + feedBack.getDeviceId());
 
-                if(message.getText().toString().isEmpty()){
-                    Toast.makeText(MainActivity.this,getString(R.string.toast_message_is_empty),Toast.LENGTH_LONG).show();
-                    return;
-                }
+            String firebaseEndPoint = getString(R.string.url_firebase_endpoint);
 
-                Feedback feedBack = new Feedback();
-                feedBack.setDeviceId(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
-                feedBack.setName(name.getText().toString());
-                feedBack.setMessage(message.getText().toString());
-                feedBack.setCreated(new Date());
-                feedBack.setId(feedBack.getCreated().getTime() + "-" + feedBack.getDeviceId());
+            if(firebaseEndPoint.isEmpty()){
+                Toast.makeText(MainActivity.this,"Feedback doesn't work yet",Toast.LENGTH_LONG).show();
+                return;
+            }
 
-                String firebaseEndPoint = getString(R.string.url_firebase_endpoint);
+            try {
+                Firebase.setAndroidContext(MainActivity.this);
+                Firebase fireBase = new Firebase(firebaseEndPoint + "/android/pebble/feedback/" + feedBack.getId());
+                fireBase.setValue(feedBack);
+                fireBase.onDisconnect();
+                fireBase = null;
 
-                if(firebaseEndPoint.isEmpty()){
-                    Toast.makeText(MainActivity.this,"Feedback doesn't work yet",Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                try {
-                    Firebase.setAndroidContext(MainActivity.this);
-                    Firebase fireBase = new Firebase(firebaseEndPoint + "/android/pebble/feedback/" + feedBack.getId());
-                    fireBase.setValue(feedBack);
-                    fireBase.onDisconnect();
-                    fireBase = null;
-
-                    Toast.makeText(MainActivity.this,getString(R.string.toast_message_sent),Toast.LENGTH_LONG).show();
-                }catch(Exception e){
-                    e.printStackTrace();
-                }
-
-                dialog.dismiss();
+                Toast.makeText(MainActivity.this,getString(R.string.toast_message_sent),Toast.LENGTH_LONG).show();
+                application.eventSentFeedback();
+            }catch(Exception e){
+                e.printStackTrace();
+                application.eventSentFeedbackFailed(e.getMessage());
+            }
+            dialog.dismiss();
             }
         });
     }

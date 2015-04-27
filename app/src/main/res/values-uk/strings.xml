@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Дружній Пебл</string>
+    <string name="url_firebase_endpoint">https://intense-heat-6899.firebaseio.com</string>
+    <string name="app_name">Friendly Pebble</string>
     <string name="txt_pebble_is_not_connected">Годинник не підключений</string>
     <string name="txt_pebble_is_connected">Годинник підключений</string>
     <string name="action_install_app">Встановити або оновити додаток на годиннику</string>
     <string name="txt_introduction">
         Читати:
-        \nПривіт друже, я вдячний що ти встановив цей додаток на свій смартмафон.
+        \nПривіт друже, я вдячний що ти встановив цей додаток на свій смартмафон. Тепер ти матимеш змогу слідкувати за станом батарейки та мережі твого смартфона на своєму годиннику.
     </string>
-    <string name="action_shut_down_wifi">Вимкнути вайфай якщо сигнал було втрачено</string>
+    <string name="action_shut_down_wifi">Вимкнути WI-FI якщо сигнал було втрачено</string>
     <string name="txt_checkbox_show_readme">Показати привітання при наступному запуску додатка</string>
-    <string name="txt_share_invitation">Маєш смартгодинник пеббл? Спробуй цей крутий додаток на андроїді</string>
+    <string name="txt_share_invitation">Маєш смартгодинник pebble? Спробуй цей крутий додаток на Android</string>
     <string name="txt_action_send_feedback">Відправити відгук</string>
     <string name="hint_message">Відгук</string>
-    <string name="action_cancel">Нє, передумав</string>
+    <string name="action_cancel">Відбій</string>
     <string name="hint_your_name_optional">Ваше ім\'я (за бажанням)</string>
     <string name="toast_message_sent">Ваш відгук відправлено, дякую!</string>
     <string name="toast_message_is_empty">Будь ласка сформуйте ваш відгук</string>
