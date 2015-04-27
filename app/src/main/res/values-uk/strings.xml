@@ -11,7 +11,7 @@
     </string>
     <string name="action_shut_down_wifi">Вимкнути WI-FI якщо сигнал було втрачено</string>
     <string name="txt_checkbox_show_readme">Показати привітання при наступному запуску додатка</string>
-    <string name="txt_share_invitation">Маєш смартгодинник pebble? Спробуй цей крутий додаток на Android</string>
+    <string name="txt_share_invitation">Маєш смартгодинник pebble? Спробуй цей крутий додаток на Android (https://play.google.com/store/apps/details?id=com.sukinsan.pebble)</string>
     <string name="txt_action_send_feedback">Відправити відгук</string>
     <string name="hint_message">Відгук</string>
     <string name="action_cancel">Відбій</string>

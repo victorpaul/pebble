@@ -203,7 +203,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         ShareActionProvider mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
         if (mShareActionProvider != null ) {
-            String shareMessage =  getResources().getString(R.string.txt_share_invitation) + " - '" + getResources().getString(R.string.app_name) + "'";
+            String shareMessage =  getResources().getString(R.string.txt_share_invitation) + " " + getResources().getString(R.string.app_name);
             mShareActionProvider.setShareIntent(createShareForecastIntent(shareMessage));
             mShareActionProvider.setOnShareTargetSelectedListener(new ShareActionProvider.OnShareTargetSelectedListener() {
                 @Override

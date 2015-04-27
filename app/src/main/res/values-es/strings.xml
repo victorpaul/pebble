@@ -11,7 +11,7 @@
     </string>
     <string name="action_shut_down_wifi">si la señal wifi se ha perdido - apaga la wifi!</string>
     <string name="txt_checkbox_show_readme">Muéstrame las instrucciones en el próximo inicio</string>
-    <string name="txt_share_invitation">Tienes un reloj pebble? Echale un vistazo a esta aplicación Android</string>
+    <string name="txt_share_invitation">Tienes un reloj pebble? Echale un vistazo a esta aplicación Android (https://play.google.com/store/apps/details?id=com.sukinsan.pebble)</string>
     <string name="txt_action_send_feedback">Enviar comentarios</string>
     <string name="hint_message">Mensaje</string>
     <string name="action_cancel">Cancelar</string>

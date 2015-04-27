@@ -11,7 +11,7 @@
     </string>
     <string name="action_shut_down_wifi">Выключить вайфай если сигнал пропал</string>
     <string name="txt_checkbox_show_readme">Показывать текстовое приветствие при следующем запуске этого приложения</string>
-    <string name="txt_share_invitation">У тебя есть часы от пеббл? Тогда обязательно попробуй это прилодение</string>
+    <string name="txt_share_invitation">ПОльзуешся часы от pebble? Обязательно попробуй (https://play.google.com/store/apps/details?id=com.sukinsan.pebble)</string>
     <string name="txt_action_send_feedback">Отправить отзыв</string>
     <string name="hint_message">Отзыв</string>
     <string name="action_cancel">Отбой</string>
