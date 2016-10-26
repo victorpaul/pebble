@@ -4,3 +4,7 @@
 /.idea/libraries
 .DS_Store
 /build
+/.idea/
+.idea/runConfigurations.xml
+/pebble.iml
+/gradle/
