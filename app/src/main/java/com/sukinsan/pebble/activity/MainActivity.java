@@ -123,8 +123,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             pebbleDataReceiver = PebbleKit.registerReceivedDataHandler(this, new PebbleKit.PebbleDataReceiver(HardwareUtils.PEBBLE_APP_UUID) {
                 @Override
                 public void receiveData(final Context context, final int transactionId, final PebbleDictionary data) {
-                    Log.i(getLocalClassName(), "Received value=" + data.getString(0) + " for key: 0");
-                    PebbleKit.sendAckToPebble(getApplicationContext(), transactionId);
+                    //Log.i(getLocalClassName(), "Received value=" + data.getString(0) + " for key: 0");
+                    //PebbleKit.sendAckToPebble(getApplicationContext(), transactionId);
                 }
             });
 

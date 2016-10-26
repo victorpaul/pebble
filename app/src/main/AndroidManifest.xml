@@ -46,6 +46,14 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name="com.sukinsan.pebble.broadcast.PebbleDataService" >
+            <intent-filter>
+                <action android:name="com.getpebble.action.app.RECEIVE" />
+                <action android:name="com.getpebble.action.app.RECEIVE_ACK" />
+                <action android:name="com.getpebble.action.app.RECEIVE_NACK" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>
