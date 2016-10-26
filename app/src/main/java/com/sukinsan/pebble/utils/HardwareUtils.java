@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.getpebble.android.kit.PebbleKit;
 import com.getpebble.android.kit.util.PebbleDictionary;
-import com.sukinsan.pebble.application.PebbleApplication;
+import com.sukinsan.pebble.PebbleApplication;
 import com.sukinsan.pebble.broadcast.PhoneStateChangedReceiver;
 import com.sukinsan.pebble.entity.Cache;
 

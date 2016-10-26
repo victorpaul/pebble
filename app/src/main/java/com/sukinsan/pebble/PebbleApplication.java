@@ -1,8 +1,7 @@
-package com.sukinsan.pebble.application;
+package com.sukinsan.pebble;
 
 import android.app.Application;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
@@ -45,18 +44,6 @@ public class PebbleApplication extends Application {
 
     public void eventCLickShare(){
         getTracker().send(new HitBuilders.EventBuilder().setCategory("share").setAction("click").setLabel("Click share").build());
-    }
-
-    public void eventCLickMenuFeedback(){
-        getTracker().send(new HitBuilders.EventBuilder().setCategory("feedback").setAction("click").setLabel("Open feedback dialog").build());
-    }
-
-    public void eventSentFeedback(){
-        getTracker().send(new HitBuilders.EventBuilder().setCategory("feedback").setAction("sent").setLabel("Feedback has been sent").build());
-    }
-
-    public void eventSentFeedbackFailed(String error){
-        getTracker().send(new HitBuilders.EventBuilder().setCategory("feedback").setAction("sending failed").setLabel("Feedback has been failed").set("error", error).build());
     }
 
     public void eventOpenApp(){

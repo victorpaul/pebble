@@ -1,7 +1,8 @@
 package com.sukinsan.pebble.application;
 
-import android.app.Application;
 import android.test.ApplicationTestCase;
+
+import com.sukinsan.pebble.PebbleApplication;
 
 /**
  * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>

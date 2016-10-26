@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.sukinsan.pebble.application.PebbleApplication;
 import com.sukinsan.pebble.entity.Cache;
 import com.sukinsan.pebble.utils.HardwareUtils;
 import com.sukinsan.pebble.utils.SystemUtils;
